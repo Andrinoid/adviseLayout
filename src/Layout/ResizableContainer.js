@@ -24,30 +24,27 @@ const Handle = styled.div`
 
 function ResizableContainer({
     children,
-    initialwidth = 320,
+    initialWidth = 320,
+    minWidth = 0,
+    maxWidth = Infinity,
 }) {
-    //elements
     const containerRef = useRef(null);
     const handleRef = useRef(null);
 
-    const [w, setW] = useState(initialwidth);
+    const [w, setW] = useState(initialWidth);
     const [x, setX] = useState(0);
-    const [newWidth, setNewWidth] = useState(initialwidth);
-    const [position, setPosition] = useState(0);
+    const [newWidth, setNewWidth] = useState(initialWidth);
     const [isResizing, setIsResizing] = useState(false);
 
-    // This is a hack to only run the effect once
     const isFirstRun = useRef(true);
     useEffect(() => {
         if (isFirstRun.current) {
             isFirstRun.current = false;
             return;
         }
-        // Attach the listeners to `document`
         document.addEventListener("mousemove", mouseMoveHandler);
         document.addEventListener("mouseup", mouseUpHandler);
         return () => {
-            // Remove the listeners from `document`
             document.removeEventListener("mousemove", mouseMoveHandler);
             document.removeEventListener("mouseup", mouseUpHandler);
         };
@@ -55,40 +52,49 @@ function ResizableContainer({
 
     const mouseDownHandler = (e) => {
         setIsResizing(true);
-        // Get the current mouse position
+        // capture the initial x position on drag start
         setX(e.clientX);
-        // Get current width of the column
+        // capture the initial container width on drag start
         setW(containerRef.current.offsetWidth);
     };
 
     const mouseMoveHandler = (e) => {
         if (!isResizing) return;
-        // How far the mouse has been moved
-        let dx = e.clientX - x;
+        // calculate how far the mouse has been dragged
+        const dx = e.clientX - x;
         let newWidth = w + dx;
+
+        if (newWidth < minWidth) {
+            const tension = w + dx - minWidth;
+            if (tension < -150) {
+                newWidth = 0;
+            } else {
+                newWidth = minWidth;
+            }
+        } else if (newWidth > maxWidth) {
+            newWidth = maxWidth;
+        }
 
         setNewWidth(newWidth);
     };
 
     const mouseUpHandler = () => {
-        // Remove the handlers of `mousemove` and `mouseup`
+        // Remove the handlers of `mousemove` and `mouseup` they are set again on the next drag
         document.removeEventListener("mousemove", mouseMoveHandler);
         document.removeEventListener("mouseup", mouseUpHandler);
         setIsResizing(false);
     };
-
 
     return (
         <Container ref={containerRef} style={{ width: newWidth }}>
             {children}
             <Handle
                 ref={handleRef}
-                onMouseDown={mouseDownHandler}
+                onMouseDown={mouseDownHandler} 
                 isResizing={isResizing}
             />
         </Container>
     );
 }
-
 
 export default ResizableContainer;

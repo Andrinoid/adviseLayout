@@ -34,7 +34,11 @@ const Footer = styled.footer`
 
 const Sider = ({ children }) => {
   return (
-    <ResizableContainer initialWidth={320}>
+    <ResizableContainer
+      initialWidth={320}
+      minWidth={200}
+      maxWidth={600}
+    >
       {children}
     </ResizableContainer>
   );
