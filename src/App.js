@@ -4,17 +4,22 @@ import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 
 const App = () => {
-
+  const [open, setOpen] = React.useState(true);
 
   return (
+    <>
+    <button onClick={() => {
+      setOpen(!open);
+    }}>Collapse Sider</button>
     <Layout>
-      <Sider></Sider>
+      <Sider open={open}></Sider>
       <Layout>
         <Header>Header</Header>
         <Content>Content</Content>
         <Footer>Footer</Footer>
       </Layout>
     </Layout>
+    </>
   );
 };
 

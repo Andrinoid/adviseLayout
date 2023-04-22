@@ -6,7 +6,7 @@ const LayoutContainer = styled.section`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  flex 1;
+  flex: 1;
   ${({ isParent }) => {
     if (isParent) {
       return `
@@ -32,9 +32,10 @@ const Footer = styled.footer`
   background-color: lightgreen;
 `;
 
-const Sider = ({ children }) => {
+const Sider = ({ children, open }) => {
   return (
     <ResizableContainer
+      open={open}
       initialWidth={320}
       minWidth={200}
       maxWidth={600}

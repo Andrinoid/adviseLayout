@@ -2,11 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
+  transition: width 0.05s ease-in;
   position: relative;
   height: 100%;
   overflow-x: hidden;
   flex-grow: 0;
-  width: 320px;
+  width: ${({ open }) => open ? 320 : 0}px;
   box-sizing: border-box;
   flex-grow: 0;
 `;
@@ -27,6 +28,7 @@ function ResizableContainer({
     initialWidth = 320,
     minWidth = 0,
     maxWidth = Infinity,
+    open = false,
 }) {
     const containerRef = useRef(null);
     const handleRef = useRef(null);
@@ -86,7 +88,7 @@ function ResizableContainer({
     };
 
     return (
-        <Container ref={containerRef} style={{ width: newWidth }}>
+        <Container open={open} ref={containerRef} style={{ width: open ? newWidth : 0 }}>
             {children}
             <Handle
                 ref={handleRef}
