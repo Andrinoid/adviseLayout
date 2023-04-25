@@ -32,18 +32,18 @@ const Footer = styled.footer`
   background-color: lightgreen;
 `;
 
-const Sider = ({ children, open }) => {
+const Sider = React.forwardRef(({ children }, ref) => {
   return (
     <ResizableContainer
-      open={open}
       initialWidth={320}
       minWidth={200}
       maxWidth={600}
+      ref={ref}
     >
       {children}
     </ResizableContainer>
   );
-};
+});
 
 
 

@@ -1,18 +1,17 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Layout, Sider, Header, Content, Footer } from "./Layout";
-import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 
 const App = () => {
-  const [open, setOpen] = React.useState(true);
+  const siderRef = useRef(null);
 
   return (
     <>
     <button onClick={() => {
-      setOpen(!open);
+        siderRef.current.toggle();
     }}>Collapse Sider</button>
     <Layout>
-      <Sider open={open}></Sider>
+        <Sider ref={siderRef} ></Sider>
       <Layout>
         <Header>Header</Header>
         <Content>Content</Content>
