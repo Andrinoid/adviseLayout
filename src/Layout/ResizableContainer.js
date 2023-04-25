@@ -7,26 +7,32 @@ const Container = styled.div`
   overflow-x: hidden;
   box-sizing: border-box;
   flex-grow: 0;
+  user-select: none;
 `;
-
 const Handle = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  width: 10px;
+  width: 7px;
   height: 100%;
   cursor: col-resize;
-  background-color: pink;
-  border-left: 1px solid #ccc;
+  background-color: ${({ hoverActive, isResizing }) => (hoverActive || isResizing ? "rgb(232, 232, 232)" : "transparent")};
+  transition: background-color 0.2s ease;
+  &:hover {
+    background-color: rgb(232, 232, 232);
+    transition: background-color 0.5s ease;
+    transition-delay: 0.5s;
+  }
 `;
 
 function ResizableContainer({
     children,
     initialWidth = 320,
     minWidth = 0,
-    maxWidth = Infinity },
+    maxWidth = Infinity,
+    className,
+},
     ref) {
-
     const containerRef = useRef(null);
     const handleRef = useRef(null);
 
@@ -36,10 +42,26 @@ function ResizableContainer({
     const [isResizing, setIsResizing] = useState(false);
     const [open, setOpen] = useState(true);
 
+    const [hoverActive, setHoverActive] = useState(false);
+    const hoverTimeout = useRef(null);
+
+    const handleMouseEnter = () => {
+        hoverTimeout.current = setTimeout(() => {
+            setHoverActive(true);
+        }, 500);
+    };
+
+    const handleMouseLeave = () => {
+        clearTimeout(hoverTimeout.current);
+        setHoverActive(false);
+    };
+
     useImperativeHandle(ref, () => ({
         toggle() {
             toggleOpen();
         },
+        isOpen: () => open,
+
     }));
 
     const toggleOpen = () => {
@@ -102,9 +124,16 @@ function ResizableContainer({
     }, [isResizing]);
 
     return (
-        <Container ref={containerRef} style={{ width: newWidth }}>
+        <Container className={className} ref={containerRef} style={{ width: newWidth }}>
             {children}
-            <Handle ref={handleRef} onMouseDown={mouseDownHandler} isResizing={isResizing} />
+            <Handle
+                ref={handleRef}
+                onMouseDown={mouseDownHandler}
+                isResizing={isResizing}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                hoverActive={hoverActive}
+            />
         </Container>
     );
 }

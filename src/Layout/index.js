@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import ResizableContainer from "./ResizableContainer";
+import Header from "./Header";
 
 const LayoutContainer = styled.section`
   display: flex;
@@ -16,15 +17,10 @@ const LayoutContainer = styled.section`
   }}
 `;
 
-const Header = styled.header`
-  height: 60px;
-  background-color: lightblue;
-  flex: 0 0 auto;
-`;
-
 const Content = styled.main`
   display: block;
   flex: 1 1 auto;
+  user-select: none;
 `;
 
 const Footer = styled.footer`
@@ -32,19 +28,19 @@ const Footer = styled.footer`
   background-color: lightgreen;
 `;
 
-const Sider = React.forwardRef(({ children }, ref) => {
+const Sider = React.forwardRef(({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
   return (
     <ResizableContainer
-      initialWidth={320}
-      minWidth={200}
-      maxWidth={600}
+      initialWidth={width}
+      minWidth={minWidth}
+      maxWidth={maxWidth}
       ref={ref}
+      className={className}
     >
       {children}
     </ResizableContainer>
   );
 });
-
 
 
 const Layout = ({ children }) => {
