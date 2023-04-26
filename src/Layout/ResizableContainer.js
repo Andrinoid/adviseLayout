@@ -38,6 +38,7 @@ function ResizableContainer({
     const { isSidebarOpen, setIsSidebarOpen } = useContext(Context);
     const containerRef = useRef(null);
     const handleRef = useRef(null);
+    const prevClientXRef = useRef(null);
 
     const [w, setW] = useState(initialWidth);
     const [x, setX] = useState(0);
@@ -90,9 +91,31 @@ function ResizableContainer({
 
     const mouseMoveHandler = (e) => {
         if (!isResizing) return;
+
+        // If the previous clientX position is null, assign the current clientX position
+        if (prevClientXRef.current === null) {
+            prevClientXRef.current = e.clientX;
+            return;
+        }
+
         // calculate how far the mouse has been dragged
         const dx = e.clientX - x;
         let newWidth = w + dx;
+
+        // Detect drag direction
+        const dragDirection = e.clientX - prevClientXRef.current; // Positive if dragging right, negative if dragging left
+        prevClientXRef.current = e.clientX;
+
+        // if (dragDirection < 0) {
+        //     console.log('dragging left');
+        // } else if (dragDirection > 0) {
+        //     console.log('dragging right');
+        // }
+
+        console.log('is sidebar open', isSidebarOpen);
+        console.log('dx', dx);
+        console.log('newWidth', newWidth);
+        console.log('tenstion', w + dx - minWidth);
 
         if (newWidth < minWidth) {
             const tension = w + dx - minWidth;
@@ -105,7 +128,6 @@ function ResizableContainer({
         } else if (newWidth > maxWidth) {
             newWidth = maxWidth;
         }
-
         setNewWidth(newWidth);
     };
 
@@ -113,7 +135,12 @@ function ResizableContainer({
         // Remove the handlers of `mousemove` and `mouseup`
         document.removeEventListener("mousemove", mouseMoveHandler);
         document.removeEventListener("mouseup", mouseUpHandler);
+        prevClientXRef.current = null;
         setIsResizing(false);
+    };
+
+    const handleDoubleClick = () => {
+        setNewWidth(initialWidth);
     };
 
     useEffect(() => {
@@ -130,12 +157,13 @@ function ResizableContainer({
         <Container className={className} ref={containerRef} style={{ width: newWidth }}>
             {children}
             <Handle
-                ref={handleRef}
                 onMouseDown={mouseDownHandler}
                 isResizing={isResizing}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                onDoubleClick={handleDoubleClick}
                 hoverActive={hoverActive}
+                ref={handleRef}
             />
         </Container>
     );
