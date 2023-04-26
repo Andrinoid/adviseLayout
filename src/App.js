@@ -1,25 +1,39 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Layout, Sider, Header, Content, Footer } from "./Layout";
-import { Allotment } from "allotment";
-import "allotment/dist/style.css";
+import styled from "styled-components";
+
+const LogoBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 40px 10px 40px;
+`;
+
+const StyledSider = styled(Sider)`
+  background-color: lightblue;
+  border-right: 1px solid rgb(232, 232, 232);
+  background: #f8fafb;
+`;
 
 const App = () => {
-  const [open, setOpen] = React.useState(true);
+  const logoSrc = process.env.PUBLIC_URL + '/logo.svg';
+  const siderRef = useRef(null);
 
   return (
-    <>
-    <button onClick={() => {
-      setOpen(!open);
-    }}>Collapse Sider</button>
     <Layout>
-      <Sider open={open}></Sider>
+      <StyledSider ref={siderRef} width={260}>
+        <LogoBox>
+          <img src={logoSrc} alt="Logo" style={{ width: '100%', height: 'auto', maxWidth: 170 }} />
+        </LogoBox>
+      </StyledSider>
       <Layout>
-        <Header>Header</Header>
+        <Header siderRef={siderRef}>
+
+        </Header>
         <Content>Content</Content>
         <Footer>Footer</Footer>
       </Layout>
     </Layout>
-    </>
   );
 };
 

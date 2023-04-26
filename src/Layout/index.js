@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import ResizableContainer from "./ResizableContainer";
+import Header from "./Header";
+import LayoutContextProvider from "./LayoutContextProvider";
+
+
 
 const LayoutContainer = styled.section`
   display: flex;
@@ -16,15 +20,10 @@ const LayoutContainer = styled.section`
   }}
 `;
 
-const Header = styled.header`
-  height: 60px;
-  background-color: lightblue;
-  flex: 0 0 auto;
-`;
-
 const Content = styled.main`
   display: block;
   flex: 1 1 auto;
+  user-select: none;
 `;
 
 const Footer = styled.footer`
@@ -32,19 +31,19 @@ const Footer = styled.footer`
   background-color: lightgreen;
 `;
 
-const Sider = ({ children, open }) => {
+const Sider = React.forwardRef(({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
   return (
     <ResizableContainer
-      open={open}
-      initialWidth={320}
-      minWidth={200}
-      maxWidth={600}
+      initialWidth={width}
+      minWidth={minWidth}
+      maxWidth={maxWidth}
+      ref={ref}
+      className={className}
     >
       {children}
     </ResizableContainer>
   );
-};
-
+});
 
 
 const Layout = ({ children }) => {
@@ -55,7 +54,18 @@ const Layout = ({ children }) => {
       isParent = true;
     }
   });
-  return <LayoutContainer isParent={isParent}>{children}</LayoutContainer>;
+
+  const layoutContent = (
+    <LayoutContainer isParent={isParent}>{children}</LayoutContainer>
+  );
+
+  //only render the LayoutContextProveder on the parent Layout
+  return isParent ? (
+    <LayoutContextProvider>{layoutContent}</LayoutContextProvider>
+  ) : (
+    layoutContent
+  );
 };
+
 
 export { Layout, Sider, Header, Content, Footer };
