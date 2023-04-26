@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
+import { Context } from "../LayoutContextProvider";
 
-const MenuIcon = ({ open }) => {
-    console.log(open)
+const MenuIcon = () => {
+
+    const { isSidebarOpen } = useContext(Context);
+
+    useEffect(() => {
+        //not working as expected
+        console.log("menu isSidebarOpen", isSidebarOpen);
+    }, [isSidebarOpen]);
+
     return (
         <svg
             viewBox="64 64 896 896"

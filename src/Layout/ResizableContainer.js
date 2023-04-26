@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useImperativeHandle, useContext } from "react";
 import styled from "styled-components";
-import { Context } from './index';
+import { Context } from "./LayoutContextProvider";
 
 const Container = styled.div`
   position: relative;
@@ -39,7 +39,6 @@ function ResizableContainer({
     const containerRef = useRef(null);
     const handleRef = useRef(null);
 
-    const [open, setOpen] = useState(true);
     const [w, setW] = useState(initialWidth);
     const [x, setX] = useState(0);
     const [newWidth, setNewWidth] = useState(initialWidth);
@@ -66,19 +65,19 @@ function ResizableContainer({
     }));
 
     const toggleOpen = () => {
-        setOpen((prevOpen) => {
+        setIsSidebarOpen((prevOpen) => {
             const newOpen = !prevOpen;
             return newOpen;
         });
     };
 
     useEffect(() => {
-        if (open) {
+        if (isSidebarOpen) {
             setNewWidth(initialWidth);
         } else {
             setNewWidth(0);
         }
-    }, [open]);
+    }, [isSidebarOpen]);
 
     const mouseDownHandler = (e) => {
         const { clientX } = e;
@@ -99,7 +98,7 @@ function ResizableContainer({
             const tension = w + dx - minWidth;
             if (tension < -150) {
                 newWidth = 0;
-                setOpen(false);
+                setIsSidebarOpen(false);
             } else {
                 newWidth = minWidth;
             }
