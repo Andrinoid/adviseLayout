@@ -112,10 +112,10 @@ function ResizableContainer({
         //     console.log('dragging right');
         // }
 
-        console.log('is sidebar open', isSidebarOpen);
-        console.log('dx', dx);
-        console.log('newWidth', newWidth);
-        console.log('tenstion', w + dx - minWidth);
+        // console.log('is sidebar open', isSidebarOpen);
+        // console.log('dx', dx);
+        // console.log('newWidth', newWidth);
+        // console.log('tenstion', w + dx - minWidth);
 
         if (newWidth < minWidth) {
             const tension = w + dx - minWidth;
