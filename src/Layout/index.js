@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import ResizableContainer from "./ResizableContainer";
 import Header from "./Header";
+
+
+export const Context = React.createContext();
 
 const LayoutContainer = styled.section`
   display: flex;
@@ -44,6 +47,9 @@ const Sider = React.forwardRef(({ width, className, maxWidth = 600, minWidth = 2
 
 
 const Layout = ({ children }) => {
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   let isParent = false;
   // Check if Layout is Layout parent
   React.Children.forEach(children, (child) => {
@@ -51,7 +57,14 @@ const Layout = ({ children }) => {
       isParent = true;
     }
   });
-  return <LayoutContainer isParent={isParent}>{children}</LayoutContainer>;
+  return (
+    <Context.Provider value={{
+      isSidebarOpen,
+      setIsSidebarOpen
+    }}>
+      <LayoutContainer isParent={isParent}>{children}</LayoutContainer>
+    </Context.Provider>
+  );
 };
 
 export { Layout, Sider, Header, Content, Footer };

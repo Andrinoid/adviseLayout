@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import MenuIcon from '../icons/MenuIcon';
+import { Context } from '../index';
 
 const HeaderContainer = styled.header`
   height: 60px;
@@ -22,9 +23,11 @@ const MenuButton = styled.div`
 
 const Header = ({ siderRef, children }) => {
 
+    const { isSidebarOpen } = useContext(Context);
+
     const toggleSidebar = () => {
         if (siderRef.current) {
-            siderRef.current.toggle(); // try creating a callback in the toggle to return the open state and use it in the menuIcon
+            siderRef.current.toggle();
         }
     };
 

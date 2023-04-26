@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
+import React, { useState, useRef, useEffect, useImperativeHandle, useContext } from "react";
 import styled from "styled-components";
+import { Context } from './index';
 
 const Container = styled.div`
   position: relative;
@@ -33,14 +34,16 @@ function ResizableContainer({
     className,
 },
     ref) {
+
+    const { isSidebarOpen, setIsSidebarOpen } = useContext(Context);
     const containerRef = useRef(null);
     const handleRef = useRef(null);
 
+    const [open, setOpen] = useState(true);
     const [w, setW] = useState(initialWidth);
     const [x, setX] = useState(0);
     const [newWidth, setNewWidth] = useState(initialWidth);
     const [isResizing, setIsResizing] = useState(false);
-    const [open, setOpen] = useState(true);
 
     const [hoverActive, setHoverActive] = useState(false);
     const hoverTimeout = useRef(null);
@@ -59,13 +62,14 @@ function ResizableContainer({
     useImperativeHandle(ref, () => ({
         toggle() {
             toggleOpen();
-        },
-        isOpen: () => open,
-
+        }
     }));
 
     const toggleOpen = () => {
-        setOpen(prevOpen => !prevOpen);
+        setOpen((prevOpen) => {
+            const newOpen = !prevOpen;
+            return newOpen;
+        });
     };
 
     useEffect(() => {
