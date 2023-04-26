@@ -13,7 +13,6 @@ module.exports = {
       exports: 'named',
       sourcemap: true,
       strict: false,
-      dir: 'build'
     }
   ],
   plugins: [babel({ babelHelpers: 'bundled' }), resolve(), commonjs(), externalPeer()],
