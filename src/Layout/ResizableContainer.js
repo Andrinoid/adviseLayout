@@ -9,6 +9,8 @@ const Container = styled.div`
   box-sizing: border-box;
   flex-grow: 0;
   user-select: none;
+  transition: width 0.2s ease;
+  transition: ${({ isResizing }) => (isResizing ? "none" : "width 0.2s ease")};
 `;
 const Handle = styled.div`
   position: absolute;
@@ -76,6 +78,7 @@ function ResizableContainer({
         if (isSidebarOpen) {
             setNewWidth(initialWidth);
         } else {
+
             setNewWidth(0);
         }
     }, [isSidebarOpen]);
@@ -102,7 +105,7 @@ function ResizableContainer({
         const dx = e.clientX - x;
         let newWidth = w + dx;
 
-        // Detect drag direction
+        // Detect drag direction. Not used at the moment but might be useful in the future
         const dragDirection = e.clientX - prevClientXRef.current; // Positive if dragging right, negative if dragging left
         prevClientXRef.current = e.clientX;
 
@@ -111,11 +114,6 @@ function ResizableContainer({
         // } else if (dragDirection > 0) {
         //     console.log('dragging right');
         // }
-
-        // console.log('is sidebar open', isSidebarOpen);
-        // console.log('dx', dx);
-        // console.log('newWidth', newWidth);
-        // console.log('tenstion', w + dx - minWidth);
 
         if (newWidth < minWidth) {
             const tension = w + dx - minWidth;
@@ -154,7 +152,12 @@ function ResizableContainer({
     }, [isResizing]);
 
     return (
-        <Container className={className} ref={containerRef} style={{ width: newWidth }}>
+        <Container
+            className={className}
+            ref={containerRef}
+            style={{ width: newWidth }}
+            isResizing={isResizing}
+        >
             {children}
             <Handle
                 onMouseDown={mouseDownHandler}
