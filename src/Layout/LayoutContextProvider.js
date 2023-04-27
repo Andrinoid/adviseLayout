@@ -16,7 +16,6 @@ const LayoutContextProvider = ({ children }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const handleResize = () => {
-        console.log(window.innerWidth);
         if (window.innerWidth < 768) {
             setIsSidebarOpen(false);
         } else {

@@ -27,8 +27,9 @@ const Content = styled.main`
 `;
 
 const Footer = styled.footer`
-  height: 60px;
-  background-color: lightgreen;
+  height: 38px;
+  background-color: #f8fafb;
+  box-shadow: inset 0px 1px 0px #e8eaed;
 `;
 
 const Sider = React.forwardRef(({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {

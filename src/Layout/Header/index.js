@@ -4,7 +4,7 @@ import MenuIcon from '../icons/MenuIcon';
 
 const HeaderContainer = styled.header`
   height: 60px;
-  background-color: lightblue;
+  background-color: #f8fafb;
   flex: 0 0 auto;
   user-select: none;
 `;
@@ -16,8 +16,14 @@ const MenuButton = styled.div`
     width: 40px;
     height: 100%;
     cursor: pointer;
-    background-color: #f6f6f6;
+    // background-color: #f6f6f6;
     font-size: 19px;
+    &:hover {
+        background-color: rgba(0,0,0,.04);
+    }
+    &:active {
+        background-color: rgba(0, 0, 0, 0.08);
+    }
 `;
 
 const Header = ({ siderRef, children }) => {
