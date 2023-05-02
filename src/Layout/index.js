@@ -1,10 +1,34 @@
 import React, { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from 'styled-components';
 import ResizableContainer from "./ResizableContainer";
 import Header from "./Header";
 import LayoutContextProvider from "./LayoutContextProvider";
+import { useSidebarContent } from "./SiderContextProvider";
 
 
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+`;
+
+const Transition = styled.div`
+  animation: ${props => props.fadeIn ? css`${fadeIn} 0.5s ease-in forwards` :
+    props.fadeOut ? css`${fadeOut} 0.5s ease-out forwards` : 'none'};
+`;
 
 const LayoutContainer = styled.section`
   display: flex;
@@ -33,16 +57,20 @@ const Footer = styled.footer`
 `;
 
 const Sider = React.forwardRef(({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
+  const { sidebarContent, prevSidebarContent } = useSidebarContent();
+
   return (
-    <ResizableContainer
-      initialWidth={width}
-      minWidth={minWidth}
-      maxWidth={maxWidth}
-      ref={ref}
-      className={className}
-    >
-      {children}
-    </ResizableContainer>
+    <Transition fadeIn={!!sidebarContent}>
+      <ResizableContainer
+        initialWidth={width}
+        minWidth={minWidth}
+        maxWidth={maxWidth}
+        ref={ref}
+        className={className}
+      >
+        {sidebarContent || children}
+      </ResizableContainer>
+    </Transition>
   );
 });
 
