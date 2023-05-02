@@ -11,6 +11,7 @@ const Container = styled.div`
   user-select: none;
   transition: width 0.2s ease;
   transition: ${({ isResizing }) => (isResizing ? "none" : "width 0.2s ease")};
+  flex-shrink: 0;
 `;
 const Handle = styled.div`
   position: absolute;
