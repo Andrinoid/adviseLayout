@@ -25,3 +25,23 @@ export function useSidebarContent() {
 
     return context;
 }
+
+
+export function useSidebar() {
+    const context = useContext(SidebarContentContext);
+    if (context === undefined) {
+        throw new Error('useSidebar must be used within a SidebarContentProvider');
+    }
+
+    const { setSidebarContent, sidebarContent } = context;
+
+    function clearContent() {
+        setSidebarContent(null);
+    }
+
+    return {
+        sidebarContent,
+        setContent: setSidebarContent,
+        clearContent
+    };
+}

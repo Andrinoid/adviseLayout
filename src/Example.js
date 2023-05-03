@@ -1,8 +1,7 @@
 import React, { useRef, useContext } from "react";
 import { Layout, Sider, Header, Content, Footer } from "./Layout";
 import styled from "styled-components";
-import { SidebarContentProvider } from "./Layout/SiderContextProvider";
-import { SidebarContentContext } from './Layout/SiderContextProvider';
+import { SidebarContentProvider, SidebarContentContext, useSidebar } from './Layout/SiderContextProvider';
 
 const LogoBox = styled.div`
   display: flex;
@@ -104,25 +103,28 @@ const SidabarControls = () => {
     );
 };
 
+//TODO if the sider is not rendered the header sidebar icon should not be rendered
+//create a custom hook that has access to the context
+
 
 const Example = () => {
     const logoSrc = process.env.PUBLIC_URL + '/logo.svg';
     const siderRef = useRef(null);
-
-    const { setSidebarContent, sidebarContent } = useContext(SidebarContentContext);
-
+    const { sidebarContent, setContent, clearContent } = useSidebar();
 
     const changeSidebar = () => {
         if (sidebarContent === null) {
-            setSidebarContent(SidabarControls);
+            setContent(<SidabarControls />);
         } else {
-            setSidebarContent(null);
+            clearContent();
         }
+
     }
 
     return (
         <Layout>
             <StyledSider ref={siderRef} width={260}>
+
                 {/* just for demostation */}
                 <LogoBox>
                     <img src={logoSrc} alt="Logo" style={{ width: '100%', height: 'auto', maxWidth: 160 }} />
@@ -133,19 +135,26 @@ const Example = () => {
                     <SiderFooter>footer</SiderFooter>
                 </SiderContext>
                 {/* just for demostation */}
+
             </StyledSider>
             <Layout>
                 <Header siderRef={siderRef}>
 
                 </Header>
                 <Content>
+
+
                     {/* just for demostation */}
                     <MainArea>
                         <button onClick={changeSidebar}>Change sidebarContent</button>
                     </MainArea>
                     {/* just for demostation */}
+
+
                 </Content>
                 <Footer>
+
+
                     {/* just for demostation */}
                     <Tabs>
                         <Tab>Actual</Tab>
@@ -154,6 +163,9 @@ const Example = () => {
                         <Tab>Dashboard</Tab>
                     </Tabs>
                     {/* just for demostation */}
+
+
+
                 </Footer>
             </Layout>
         </Layout>
