@@ -17,13 +17,13 @@ const Handle = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  width: 7px;
+  width: 4px;
   height: 100%;
   cursor: col-resize;
-  background-color: ${({ hoverActive, isResizing }) => (hoverActive || isResizing ? "rgb(232, 232, 232)" : "transparent")};
-  transition: background-color 0.2s ease;
+  background-color: ${({ hoverActive, isResizing }) => (hoverActive || isResizing ? "rgb(232 232 232 / 79%)" : "transparent")};
+  transition: background-color 0.3s ease;
   &:hover {
-    background-color: rgb(232, 232, 232);
+    background-color: rgb(232 232 232 / 79%);
     transition: background-color 0.5s ease;
     transition-delay: 0.5s;
   }

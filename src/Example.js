@@ -74,6 +74,36 @@ const MainArea = styled.div`
     padding: 20px;
 `;
 
+const SidebarHeader = styled.div`
+    margin-bottom: 20px;
+    background-color: #242a43;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h2 {
+        margin: 0;
+        padding: 0;
+        font-size: 18px;
+        color: white;
+    }
+`;
+
+
+const SidabarControls = () => {
+    return (
+        <>
+            <SidebarHeader>
+                <h2>Controls</h2>
+            </SidebarHeader>
+            <MainArea>
+                <p>Some range</p>
+                <input type="range" min="1" max="100" value="50" onChange={() => { }}></input>
+            </MainArea>
+        </>
+    );
+};
+
 
 const Example = () => {
     const logoSrc = process.env.PUBLIC_URL + '/logo.svg';
@@ -84,7 +114,7 @@ const Example = () => {
 
     const changeSidebar = () => {
         if (sidebarContent === null) {
-            setSidebarContent(<p>New Sidebar Content!</p>);
+            setSidebarContent(SidabarControls);
         } else {
             setSidebarContent(null);
         }
