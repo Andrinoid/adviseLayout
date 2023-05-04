@@ -60,7 +60,7 @@ const Sider = React.forwardRef(({ width, className, maxWidth = 600, minWidth = 2
   const { sidebarContent, prevSidebarContent } = useSidebarContent();
 
   return (
-    <Transition fadeIn={!!sidebarContent}>
+    // <Transition fadeIn={!!sidebarContent}>
       <ResizableContainer
         initialWidth={width}
         minWidth={minWidth}
@@ -70,7 +70,7 @@ const Sider = React.forwardRef(({ width, className, maxWidth = 600, minWidth = 2
       >
         {sidebarContent || children}
       </ResizableContainer>
-    </Transition>
+    // </Transition>
   );
 });
 

@@ -1,10 +1,13 @@
 import React, { useRef, useContext } from "react";
 import { Layout, Sider, Header, Content, Footer } from "./Layout";
 import styled from "styled-components";
-import { SidebarContentProvider, SidebarContentContext, useSidebar } from './Layout/SiderContextProvider';
+import { useSidebar } from './Layout/SiderContextProvider';
 
 const LogoBox = styled.div`
   display: flex;
+  background: #f8fafb;
+  box-sizing: border-box;
+  padding: 10px;
   justify-content: center;
   align-items: center;
   height: 60px; //use headerHeight variable here and on the header to make sure this is always in alignment
@@ -44,19 +47,19 @@ const SiderContext = styled.div`
 `;
 
 const SiderTop = styled.div`
+  box-sizing: border-box;
+  border-bottom: 1px solid rgb(232, 232, 232); // put into a variable
   display: flex;
   align-items: center;
   height: 60px;
-  padding: 0 20px;
+  padding: 0 ${props => props.padding}px;
   font-size: 15px;
   cursor: pointer;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-  }
-  &:active {
-    background-color: rgba(0, 0, 0, 0.08);
-  }
 `;
+
+SiderTop.defaultProps = {
+    padding: 20, // Set default padding value to 20
+};
 
 const SiderMain = styled.div`
   flex: 1 1 auto;
@@ -73,28 +76,39 @@ const MainArea = styled.div`
     padding: 20px;
 `;
 
-const SidebarHeader = styled.div`
-    margin-bottom: 20px;
-    background-color: #242a43;
-    height: 60px;
+const ListItem = styled.div`
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: center;
-    h2 {
-        margin: 0;
-        padding: 0;
-        font-size: 18px;
-        color: white;
+    height: 60px;
+    padding: 0 20px;
+    font-size: 15px;
+    cursor: pointer;
+    &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
     }
+    &:active {
+    background-color: rgba(0, 0, 0, 0.08);
+    }
+`;
+
+const SidebarLinks = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 60px;
+    background-color: #242a43;
+    border-right: 1px solid rgb(232, 232, 232);
+    background: #f8fafb;
 `;
 
 
 const SidabarControls = () => {
     return (
         <>
-            <SidebarHeader>
-                <h2>Controls</h2>
-            </SidebarHeader>
+            <SiderTop padding={10}>
+                <b>Controls</b>
+            </SiderTop>
             <MainArea>
                 <p>Some range</p>
                 <input type="range" min="1" max="100" value="50" onChange={() => { }}></input>
@@ -103,12 +117,24 @@ const SidabarControls = () => {
     );
 };
 
+const CompanySettings = () => {
+    return (
+        <SiderContext>
+            <SiderTop><b>Company Name</b></SiderTop>
+            <SiderMain>
+                <ListItem>Company Profile</ListItem>
+                <ListItem>Users & Permissions</ListItem>
+                <ListItem>Invitation Center</ListItem>
+            </SiderMain>
+        </SiderContext>
+    );
+};
+
 //TODO if the sider is not rendered the header sidebar icon should not be rendered
 //create a custom hook that has access to the context
 
 
 const Example = () => {
-    const logoSrc = process.env.PUBLIC_URL + '/logo.svg';
     const siderRef = useRef(null);
     const { sidebarContent, setContent, clearContent } = useSidebar();
 
@@ -121,17 +147,30 @@ const Example = () => {
 
     }
 
+    const showCompanySettings = () => {
+
+        setContent(<CompanySettings />);
+    }
+
     return (
         <Layout>
+            <SidebarLinks>
+                <SiderTop padding={12}>
+                    <img src={process.env.PUBLIC_URL + '/advise.png'} alt="Logo" style={{ width: '100%', height: 'auto', maxWidth: 60 }} />
+                </SiderTop>
+                <ListItem onClick={changeSidebar}><img src={process.env.PUBLIC_URL + '/home.svg'} /></ListItem>
+                <ListItem onClick={showCompanySettings}><img src={process.env.PUBLIC_URL + '/gear.svg'} /></ListItem>
+
+            </SidebarLinks>
             <StyledSider ref={siderRef} width={260}>
 
                 {/* just for demostation */}
-                <LogoBox>
-                    <img src={logoSrc} alt="Logo" style={{ width: '100%', height: 'auto', maxWidth: 160 }} />
-                </LogoBox>
+
                 <SiderContext>
-                    <SiderTop>Company </SiderTop>
-                    <SiderMain>some list</SiderMain>
+                    <SiderTop><b>Company Name</b></SiderTop>
+                    <SiderMain>
+                        <ListItem>Some stuff</ListItem>
+                    </SiderMain>
                     <SiderFooter>footer</SiderFooter>
                 </SiderContext>
                 {/* just for demostation */}
