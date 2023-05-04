@@ -1,12 +1,12 @@
 import React from "react";
-import { SidebarContentProvider } from "./Layout/SiderContextProvider";
+import { SidebarsProvider } from "./Layout/SidebarsContextProvider";
 import Example from "./Example";
 
 const App = () => {
   return (
-    <SidebarContentProvider>
+    <SidebarsProvider>
       <Example />
-    </SidebarContentProvider>
+    </SidebarsProvider>
   );
 };
 

@@ -29,12 +29,13 @@ const Handle = styled.div`
   }
 `;
 
-function ResizableContainer({
+export const ResizableContainer = React.forwardRef(function ({
     children,
     initialWidth = 320,
     minWidth = 0,
     maxWidth = Infinity,
     className,
+    drawer = false,
 },
     ref) {
 
@@ -82,7 +83,7 @@ function ResizableContainer({
 
             setNewWidth(0);
         }
-    }, [isSidebarOpen]);
+    }, [isSidebarOpen, initialWidth]);
 
     const mouseDownHandler = (e) => {
         const { clientX } = e;
@@ -160,7 +161,7 @@ function ResizableContainer({
             isResizing={isResizing}
         >
             {children}
-            <Handle
+            {!drawer && <Handle
                 onMouseDown={mouseDownHandler}
                 isResizing={isResizing}
                 onMouseEnter={handleMouseEnter}
@@ -168,9 +169,7 @@ function ResizableContainer({
                 onDoubleClick={handleDoubleClick}
                 hoverActive={hoverActive}
                 ref={handleRef}
-            />
+            />}
         </Container>
     );
-}
-
-export default React.forwardRef(ResizableContainer);
+});

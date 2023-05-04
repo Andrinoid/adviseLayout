@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from 'styled-components';
-import ResizableContainer from "./ResizableContainer";
+import { ResizableContainer } from "./Containers";
 import Header from "./Header";
 import LayoutContextProvider from "./LayoutContextProvider";
-import { useSidebarContent } from "./SiderContextProvider";
+import { useControls } from "./SidebarsContextProvider";
 
 
 
@@ -56,19 +56,19 @@ const Footer = styled.footer`
   box-shadow: inset 0px 1px 0px #e8eaed;
 `;
 
-const Sider = React.forwardRef(({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
-  const { sidebarContent, prevSidebarContent } = useSidebarContent();
+const Sider = React.forwardRef(({ drawer, content, width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
 
   return (
     // <Transition fadeIn={!!sidebarContent}>
       <ResizableContainer
+        drawer={drawer}
         initialWidth={width}
         minWidth={minWidth}
         maxWidth={maxWidth}
         ref={ref}
         className={className}
       >
-        {sidebarContent || children}
+        {content || children}
       </ResizableContainer>
     // </Transition>
   );
