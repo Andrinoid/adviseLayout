@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useState } from "react";
 import { Layout, Sider, Header, Content, Footer } from "./Layout";
 import styled from "styled-components";
 import { useControls } from "./Layout/SidebarsContextProvider";
@@ -114,6 +114,41 @@ const SidebarLinks = styled.div`
     background: #f8fafb;
 `;
 
+const ControlButton = styled.button`
+    border: none;
+    background-color: ${({ inverted }) => inverted ? 'rgb(66, 82, 110)' : 'rgb(248, 250, 251)'};
+    color: ${({ inverted }) => !inverted ? 'rgb(66, 82, 110)' : 'rgb(248, 250, 251)'};
+    font-size: 15px;
+    padding: 0 20px;
+    height: 60px;
+    cursor: pointer;
+    font-weight: bold;
+`;
+
+const Flex = styled.div`
+    display: flex;
+    justify-content: ${(props) => props.justifyContent};
+    align-items: ${(props) => props.alignItems};
+    flex-direction: ${(props) => props.flexDirection};
+    min-height: ${(props) => props.height}px;
+    max-width: ${(props) => props.maxWidth}px;
+    border: ${(props) => props.dashed && "2px dashed rgb(66, 82, 110)"};
+    width: ${(props) => props.width}px;
+    padding: ${(props) => props.padding}px;
+`;
+
+Flex.defaultProps = {
+    justifyContent: "initial",
+    alignItems: "initial",
+    flexDirection: "initial",
+    minHeight: 100,
+    width: "100%",
+    maxWidth: "100%",
+    border: 'initial',
+    width: '100%',
+    padding: '0 20px'
+};
+
 const SidabarControls = () => {
     return (
         <>
@@ -169,6 +204,7 @@ const DatasourcesSettings = () => {
 
 const Example = () => {
     const siderRef = useRef(null);
+    const [sidebarNumber, setSidebarNumber] = useState(1);
     const controls = useControls();
 
     const changeSidebar = () => {
@@ -202,7 +238,6 @@ const Example = () => {
             </SidebarLinks>
 
             {controls.getSidebars().map((sidebar, i) => {
-                
                 return (
                     <StyledSider
                         drawer={i != 0}
@@ -230,16 +265,83 @@ const Example = () => {
                 <Content>
                     {/* just for demostation */}
                     <MainArea>
-                        <button onClick={changeSidebar}>Push on sidebar 1</button>
-                        <button onClick={() => {
-                            controls.popSidebar(1)
-                        }}>Pop on sidebar 1</button>
+                        <Flex
+                            flexDirection="column"
+                            minHeight={100}
+                            justifyContent="space-between"
+                            alignItems="center"
+                            dashed
+                            padding={20}
+                            width={400}
+                        >
+                            <input
+                                type="number"
+                                onChange={(e) => {
+                                    if (
+                                        sidebarNumber > 0 &&
+                                        sidebarNumber <
+                                            controls.getSidebars().length
+                                    ) {
+                                        setSidebarNumber(e.target.value);
+                                    }
+                                }}
+                                value={sidebarNumber}
+                                style={{
+                                    width: 350,
+                                    minHeight: 40,
+                                    fontSize: 20,
+                                    textAlign: "center",
+                                    border: "2px solid rgb(66, 82, 110)",
+                                    borderRadius: 5,
+                                    outline: "none",
+                                    marginBottom: 10,
+                                }}
+                            />
+                            <Flex
+                                justifyContent="space-between"
+                                style={{
+                                    width: 350,
+                                    marginBottom: 20,
+                                }}
+                            >
+                                <ControlButton inverted onClick={changeSidebar}>
+                                    Push on sidebar {sidebarNumber}
+                                </ControlButton>
+                                <ControlButton inverted
+                                    onClick={() => {
+                                        controls.popSidebar(1);
+                                    }}
+                                >
+                                    Pop on sidebar {sidebarNumber}
+                                </ControlButton>
+                            </Flex>
 
-                        <button onClick={() => {
-                            controls.addSidebar(<CompanySettings />)
-                        }}>Add sidebar</button>
+                            <span
+                                style={{
+                                    textTransform: "uppercase",
+                                    fontWeight: "bold",
+                                    color: "rgb(66, 82, 110)",
+                                }}
+                            >
+                                sidebar one stack size{" "}
+                                {controls.getSidebar(sidebarNumber).length()}
+                            </span>
+                        </Flex>
 
-                        <span>sidebar one stack size {controls.getSidebar(1).length()}</span>
+                        <Flex
+                            dashed
+                            padding={20}
+                            width={400}
+                            style={{ marginTop: 10 }}
+                        >
+                            <ControlButton inverted
+                                onClick={() => {
+                                    controls.addSidebar(<CompanySettings />);
+                                }}
+                            >
+                                Add sidebar
+                            </ControlButton>
+                        </Flex>
                     </MainArea>
                     {/* just for demostation */}
                 </Content>
