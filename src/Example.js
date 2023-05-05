@@ -219,8 +219,8 @@ const Example = () => {
         }
     };
 
-    const showCompanySettings = () => {
-        controls.changeSidebar(<CompanySettings />);
+    const showCompanySettings = (sidebarNumber) => {
+        controls.changeSidebar(<CompanySettings />, sidebarNumber);
     };
 
     return (
@@ -233,10 +233,10 @@ const Example = () => {
                         style={{ width: "100%", height: "auto", maxWidth: 60 }}
                     />
                 </SiderTop>
-                <ListItem onClick={changeSidebar}>
+                <ListItem onClick={()=> changeSidebar(sidebarNumber)}>
                     <img src={process.env.PUBLIC_URL + "/home.svg"} />
                 </ListItem>
-                <ListItem onClick={showCompanySettings}>
+                <ListItem onClick={() => showCompanySettings(sidebarNumber)}>
                     <img src={process.env.PUBLIC_URL + "/gear.svg"} />
                 </ListItem>
             </SidebarLinks>
