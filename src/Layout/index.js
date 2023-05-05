@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from 'styled-components';
-import { ResizableContainer } from "./Containers";
+import { ResizableContainer } from "./ResizableContainer";
 import Header from "./Header";
 import LayoutContextProvider from "./LayoutContextProvider";
 import { useControls } from "./SidebarsContextProvider";
