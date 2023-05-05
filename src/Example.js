@@ -219,10 +219,6 @@ const Example = () => {
         }
     };
 
-    const showCompanySettings = (sidebarNumber) => {
-        controls.changeSidebar(<CompanySettings />, sidebarNumber);
-    };
-
     return (
         <Layout>
             <SidebarLinks>
@@ -233,23 +229,33 @@ const Example = () => {
                         style={{ width: "100%", height: "auto", maxWidth: 60 }}
                     />
                 </SiderTop>
-                <ListItem onClick={() => changeSidebar(sidebarNumber)}>
+                <ListItem
+                    onClick={() => {
+                        controls.changeSidebar(
+                            <DatasourcesSettings />,
+                            sidebarNumber
+                        );
+                    }}
+                >
                     <img src={process.env.PUBLIC_URL + "/home.svg"} />
                 </ListItem>
-                <ListItem onClick={() => showCompanySettings(sidebarNumber)}>
+                <ListItem
+                    onClick={() => {
+                        controls.changeSidebar(
+                            <CompanySettings />,
+                            sidebarNumber
+                        );
+                    }}
+                >
                     <img src={process.env.PUBLIC_URL + "/gear.svg"} />
                 </ListItem>
             </SidebarLinks>
 
-            <StyledSider
-                ref={siderRef}
-                width={260}
-            >
+            <StyledSider ref={siderRef} width={260}>
                 <SiderContext>
-                   
-                        <SiderTop>
-                            <b>Company Name</b>
-                        </SiderTop>
+                    <SiderTop>
+                        <b>Company Name</b>
+                    </SiderTop>
                     <SiderMain>
                         <ListItem>Default children case content null</ListItem>
                     </SiderMain>
