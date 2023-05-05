@@ -50,26 +50,6 @@ export function useControls() {
 
     const { sidebars, setSidebars } = context;
 
-    function clearContent(number) {
-        if (!number) {
-            setSidebars(
-                sidebars.map((sidebar) => {
-                    sidebar.content = [];
-
-                    return Object.assign(new Sidebar(), sidebar);
-                })
-            );
-        } else {
-            if (number < 1 || number > sidebars.length)
-                throw new Error("Sidebar number out of range");
-
-            sidebars[number - 1].content = [];
-
-            // using Object.assign instead of spread operator to avoid losing class methods
-            setSidebars(Object.assign([], sidebars));
-        }
-    }
-
     function getSidebar(number = 1) {
         if (!number || number < 1 || number > sidebars.length)
             throw new Error("Sidebar number out of range");
@@ -77,7 +57,7 @@ export function useControls() {
         return sidebars[number - 1];
     }
 
-    function changeSidebar(content, number = 1) {
+    function addToSidebar(content, number = 1) {
         if (!number || number < 1 || number > sidebars.length)
             throw new Error("Sidebar number out of range");
 
@@ -102,12 +82,17 @@ export function useControls() {
         setSidebars(Object.assign([], sidebars));
     }
 
+    function length() {
+        return sidebars.length;
+    }
+
     return {
         getSidebars,
         getSidebar,
-        changeSidebar,
+        addToSidebar,
         clearContent,
         addSidebar,
         popSidebar,
+        length
     };
 }

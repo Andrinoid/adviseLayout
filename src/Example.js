@@ -212,9 +212,9 @@ const Example = () => {
     const changeSidebar = (number) => {
         if (number) {
             if (controls.getSidebar(number).length() % 2 == 0) {
-                controls.changeSidebar(<SidabarControls />, number);
+                controls.addToSidebar(<SidabarControls />, number);
             } else {
-                controls.changeSidebar(<DatasourcesSettings />, number);
+                controls.addToSidebar(<DatasourcesSettings />, number);
             }
         }
     };
@@ -231,7 +231,7 @@ const Example = () => {
                 </SiderTop>
                 <ListItem
                     onClick={() => {
-                        controls.changeSidebar(
+                        controls.addToSidebar(
                             <DatasourcesSettings />,
                             sidebarNumber
                         );
@@ -241,7 +241,7 @@ const Example = () => {
                 </ListItem>
                 <ListItem
                     onClick={() => {
-                        controls.changeSidebar(
+                        controls.addToSidebar(
                             <CompanySettings />,
                             sidebarNumber
                         );
@@ -285,13 +285,8 @@ const Example = () => {
                                         return;
                                     }
 
-                                    if (
-                                        e.target.value >=
-                                        controls.getSidebars().length
-                                    ) {
-                                        setSidebarNumber(
-                                            controls.getSidebars().length
-                                        );
+                                    if (e.target.value >= controls.length()) {
+                                        setSidebarNumber(controls.length());
                                         return;
                                     }
 
@@ -358,7 +353,11 @@ const Example = () => {
                             <ControlButton
                                 inverted
                                 onClick={() => {
-                                    controls.addSidebar(<CompanySettings />);
+                                    if (controls.length() < 3) {
+                                        controls.addSidebar(
+                                            <CompanySettings />
+                                        );
+                                    }
                                 }}
                             >
                                 Add sidebar
