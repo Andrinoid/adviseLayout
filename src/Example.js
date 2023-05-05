@@ -323,7 +323,7 @@ const Example = () => {
                                     color: "rgb(66, 82, 110)",
                                 }}
                             >
-                                sidebar one stack size{" "}
+                                sidebar {sidebarNumber} stack size{" "}
                                 {controls.getSidebar(sidebarNumber).length()}
                             </span>
                         </Flex>
