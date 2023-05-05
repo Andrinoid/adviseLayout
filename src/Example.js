@@ -241,29 +241,6 @@ const Example = () => {
                 </ListItem>
             </SidebarLinks>
 
-            {/* {controls.getSidebars().map((sidebar, i) => {
-                return (
-                    <StyledSider
-                        drawer={i != 0}
-                        content={sidebar.top()}
-                        ref={siderRef}
-                        width={260}
-                    >
-                        <SiderContext>
-                            {i == 0 && (
-                                <SiderTop>
-                                    <b>Company Name {i + 1}</b>
-                                </SiderTop>
-                            )}
-                            <SiderMain>
-                                <ListItem>Some stuff</ListItem>
-                            </SiderMain>
-                            <SiderFooter>footer</SiderFooter>
-                        </SiderContext>
-                    </StyledSider>
-                );
-            })} */}
-
             <StyledSider
                 ref={siderRef}
                 width={260}
