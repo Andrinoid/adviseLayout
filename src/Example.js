@@ -349,6 +349,7 @@ const Example = () => {
                             padding={20}
                             width={400}
                             style={{ marginTop: 10 }}
+                            justifyContent="space-between"
                         >
                             <ControlButton
                                 inverted
@@ -361,6 +362,24 @@ const Example = () => {
                                 }}
                             >
                                 Add sidebar
+                            </ControlButton>
+
+                            <ControlButton
+                                inverted
+                                onClick={() => {
+                                    controls.popStack();
+                                }}
+                            >
+                                Pop sidebar
+                            </ControlButton>
+
+                            <ControlButton
+                                inverted
+                                onClick={() => {
+                                    controls.popStacks();
+                                }}
+                            >
+                                Pop sidebars
                             </ControlButton>
                         </Flex>
                     </MainArea>

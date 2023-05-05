@@ -3,35 +3,35 @@ import React, { createContext, useContext, useState } from "react";
 // Create Sidebar Content Context
 export const SidebarsContext = createContext();
 
-export class Sidebar {
-    content = [];
+export class Stack {
+    data = [];
 
-    constructor(content) {
-        if (content) {
-            this.content.push(content);
+    constructor(component) {
+        if (component) {
+            this.data.push(component);
         }
     }
 
     top() {
-        return this.content[this.content.length - 1];
+        return this.data[this.length() - 1];
     }
 
     push(content) {
-        this.content.push(content);
+        this.data.push(content);
     }
 
     pop() {
-        return this.content.pop();
+        return this.data.pop();
     }
 
     length() {
-        return this.content.length;
+        return this.data.length;
     }
 }
 
 // Provider component
 export function SidebarsProvider({ children }) {
-    const [sidebars, setSidebars] = useState([new Sidebar()]);
+    const [sidebars, setSidebars] = useState([new Stack()]);
 
     return (
         <SidebarsContext.Provider value={{ sidebars, setSidebars }}>
@@ -51,27 +51,29 @@ export function useControls() {
     const { sidebars, setSidebars } = context;
 
     function getSidebar(number = 1) {
-        if (!number || number < 1 || number > sidebars.length)
-            throw new Error("Sidebar number out of range");
+        if (number > 0 && number <= sidebars.length) {
+            return sidebars[number - 1];
+        }
 
-        return sidebars[number - 1];
-    }
-
-    function addToSidebar(content, number = 1) {
-        if (!number || number < 1 || number > sidebars.length)
-            throw new Error("Sidebar number out of range");
-
-        sidebars[number - 1].push(content);
-        setSidebars(Object.assign([], sidebars));
-    }
-
-    function addSidebar(content) {
-        sidebars.push(new Sidebar(content));
-        setSidebars(Object.assign([], sidebars));
+        return null;
     }
 
     function getSidebars() {
         return sidebars;
+    }
+
+    function addToSidebar(content, number = 1) {
+        if (number > 0 && number <= sidebars.length) {
+            sidebars[number - 1].push(content);
+
+            setSidebars(Object.assign([], sidebars));
+        }
+    }
+
+    function addSidebar(content) {
+        sidebars.push(new Stack(content));
+
+        setSidebars(Object.assign([], sidebars));
     }
 
     function popSidebar(number) {
@@ -86,13 +88,31 @@ export function useControls() {
         return sidebars.length;
     }
 
+    function popStack() {
+        if (sidebars.length > 1) {
+            sidebars.pop();
+            setSidebars(Object.assign([], sidebars));
+        }
+    }
+
+    function popStacks() {
+        if (sidebars.length > 1) {
+            for (let i = 0; i < sidebars.length; i++) {
+                sidebars.pop();
+            }
+
+            setSidebars(Object.assign([], sidebars));
+        }
+    }
+
     return {
-        getSidebars,
         getSidebar,
+        getSidebars,
         addToSidebar,
-        clearContent,
         addSidebar,
         popSidebar,
-        length
+        length,
+        popStack,
+        popStacks,
     };
 }
