@@ -233,7 +233,7 @@ const Example = () => {
                         style={{ width: "100%", height: "auto", maxWidth: 60 }}
                     />
                 </SiderTop>
-                <ListItem onClick={()=> changeSidebar(sidebarNumber)}>
+                <ListItem onClick={() => changeSidebar(sidebarNumber)}>
                     <img src={process.env.PUBLIC_URL + "/home.svg"} />
                 </ListItem>
                 <ListItem onClick={() => showCompanySettings(sidebarNumber)}>
@@ -241,7 +241,7 @@ const Example = () => {
                 </ListItem>
             </SidebarLinks>
 
-            {controls.getSidebars().map((sidebar, i) => {
+            {/* {controls.getSidebars().map((sidebar, i) => {
                 return (
                     <StyledSider
                         drawer={i != 0}
@@ -262,7 +262,23 @@ const Example = () => {
                         </SiderContext>
                     </StyledSider>
                 );
-            })}
+            })} */}
+
+            <StyledSider
+                ref={siderRef}
+                width={260}
+            >
+                <SiderContext>
+                   
+                        <SiderTop>
+                            <b>Company Name</b>
+                        </SiderTop>
+                    <SiderMain>
+                        <ListItem>Default children case content null</ListItem>
+                    </SiderMain>
+                    <SiderFooter>footer</SiderFooter>
+                </SiderContext>
+            </StyledSider>
 
             <Layout>
                 <Header siderRef={siderRef}></Header>
@@ -322,7 +338,10 @@ const Example = () => {
                                     marginBottom: 20,
                                 }}
                             >
-                                <ControlButton inverted onClick={() => changeSidebar(sidebarNumber)}>
+                                <ControlButton
+                                    inverted
+                                    onClick={() => changeSidebar(sidebarNumber)}
+                                >
                                     Push on sidebar {sidebarNumber}
                                 </ControlButton>
                                 <ControlButton
