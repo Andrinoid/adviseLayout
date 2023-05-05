@@ -116,8 +116,10 @@ const SidebarLinks = styled.div`
 
 const ControlButton = styled.button`
     border: none;
-    background-color: ${({ inverted }) => inverted ? 'rgb(66, 82, 110)' : 'rgb(248, 250, 251)'};
-    color: ${({ inverted }) => !inverted ? 'rgb(66, 82, 110)' : 'rgb(248, 250, 251)'};
+    background-color: ${({ inverted }) =>
+        inverted ? "rgb(66, 82, 110)" : "rgb(248, 250, 251)"};
+    color: ${({ inverted }) =>
+        !inverted ? "rgb(66, 82, 110)" : "rgb(248, 250, 251)"};
     font-size: 15px;
     padding: 0 20px;
     height: 60px;
@@ -144,9 +146,9 @@ Flex.defaultProps = {
     minHeight: 100,
     width: "100%",
     maxWidth: "100%",
-    border: 'initial',
-    width: '100%',
-    padding: '0 20px'
+    border: "initial",
+    width: "100%",
+    padding: "0 20px",
 };
 
 const SidabarControls = () => {
@@ -207,11 +209,13 @@ const Example = () => {
     const [sidebarNumber, setSidebarNumber] = useState(1);
     const controls = useControls();
 
-    const changeSidebar = () => {
-        if (controls.getSidebar(1).length() % 2 == 0) {
-            controls.changeSidebar(<SidabarControls />);
-        } else {
-            controls.changeSidebar(<DatasourcesSettings />);
+    const changeSidebar = (number) => {
+        if (number) {
+            if (controls.getSidebar(number).length() % 2 == 0) {
+                controls.changeSidebar(<SidabarControls />, number);
+            } else {
+                controls.changeSidebar(<DatasourcesSettings />, number);
+            }
         }
     };
 
@@ -277,13 +281,27 @@ const Example = () => {
                             <input
                                 type="number"
                                 onChange={(e) => {
-                                    if (
-                                        sidebarNumber > 0 &&
-                                        sidebarNumber <
-                                            controls.getSidebars().length
-                                    ) {
-                                        setSidebarNumber(e.target.value);
+                                    if (e.target.value == "") {
+                                        setSidebarNumber(1);
+                                        return;
                                     }
+
+                                    if (
+                                        e.target.value >=
+                                        controls.getSidebars().length
+                                    ) {
+                                        setSidebarNumber(
+                                            controls.getSidebars().length
+                                        );
+                                        return;
+                                    }
+
+                                    if (e.target.value < 1) {
+                                        setSidebarNumber(1);
+                                        return;
+                                    }
+
+                                    setSidebarNumber(e.target.value);
                                 }}
                                 value={sidebarNumber}
                                 style={{
@@ -304,12 +322,13 @@ const Example = () => {
                                     marginBottom: 20,
                                 }}
                             >
-                                <ControlButton inverted onClick={changeSidebar}>
+                                <ControlButton inverted onClick={() => changeSidebar(sidebarNumber)}>
                                     Push on sidebar {sidebarNumber}
                                 </ControlButton>
-                                <ControlButton inverted
+                                <ControlButton
+                                    inverted
                                     onClick={() => {
-                                        controls.popSidebar(1);
+                                        controls.popSidebar(sidebarNumber);
                                     }}
                                 >
                                     Pop on sidebar {sidebarNumber}
@@ -334,7 +353,8 @@ const Example = () => {
                             width={400}
                             style={{ marginTop: 10 }}
                         >
-                            <ControlButton inverted
+                            <ControlButton
+                                inverted
                                 onClick={() => {
                                     controls.addSidebar(<CompanySettings />);
                                 }}
