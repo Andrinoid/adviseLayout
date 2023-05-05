@@ -149,6 +149,21 @@ const CompanySettings = () => {
     );
 };
 
+const DatasourcesSettings = () => {
+    return (
+        <SiderContext>
+            <SiderTop>
+                <b>Datasources</b>
+            </SiderTop>
+            <SiderMain>
+                <ListItem>Datasource 1</ListItem>
+                <ListItem>Datasource 2</ListItem>
+                <ListItem>Datasource 3</ListItem>
+            </SiderMain>
+        </SiderContext>
+    );
+};
+
 //TODO if the sider is not rendered the header sidebar icon should not be rendered
 //create a custom hook that has access to the context
 
@@ -157,15 +172,15 @@ const Example = () => {
     const controls = useControls();
 
     const changeSidebar = () => {
-        if (controls.getSidebar(1) === null) {
-            controls.setSidebar(<SidabarControls />);
+        if (controls.getSidebar(1).length() % 2 == 0) {
+            controls.changeSidebar(<SidabarControls />);
         } else {
-            controls.clearContent();
+            controls.changeSidebar(<DatasourcesSettings />);
         }
     };
 
     const showCompanySettings = () => {
-        controls.setSidebar(<CompanySettings />);
+        controls.changeSidebar(<CompanySettings />);
     };
 
     return (
@@ -187,10 +202,11 @@ const Example = () => {
             </SidebarLinks>
 
             {controls.getSidebars().map((sidebar, i) => {
+                
                 return (
                     <StyledSider
                         drawer={i != 0}
-                        content={sidebar.content}
+                        content={sidebar.top()}
                         ref={siderRef}
                         width={260}
                     >
@@ -214,7 +230,16 @@ const Example = () => {
                 <Content>
                     {/* just for demostation */}
                     <MainArea>
-                        <button onClick={changeSidebar}>Change sidebars</button>
+                        <button onClick={changeSidebar}>Push on sidebar 1</button>
+                        <button onClick={() => {
+                            controls.popSidebar(1)
+                        }}>Pop on sidebar 1</button>
+
+                        <button onClick={() => {
+                            controls.addSidebar(<CompanySettings />)
+                        }}>Add sidebar</button>
+
+                        <span>sidebar one stack size {controls.getSidebar(1).length()}</span>
                     </MainArea>
                     {/* just for demostation */}
                 </Content>
