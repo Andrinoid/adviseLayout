@@ -8,21 +8,6 @@ import React, {
 import styled from "styled-components";
 import { Context } from "./LayoutContextProvider";
 
-const Wrapper = styled.div`
-    height: 100%;
-    width: 100%;
-
-    .closed {
-        transform: scale(0.95);
-        opacity: 0;
-        width: ${({ drawer }) => (!drawer ? "0px !important" : "100%")};
-    }
-
-    .open {
-        transform: scale(1);
-        opacity: 1;
-    }
-`;
 const Container = styled.div`
     position: relative;
     height: 100%;
@@ -30,12 +15,9 @@ const Container = styled.div`
     box-sizing: border-box;
     flex-grow: 0;
     user-select: none;
-    transition: ${({ isResizing, drawer }) => {
-        if (!drawer) {
-            return isResizing ? "none" : "width 0.2s ease";
-        }
-        return "all 0.3s ease"
-    }};
+    transition: width 0.2s ease;
+    transition: ${({ isResizing }) =>
+        isResizing ? "none" : "width 0.2s ease"};
     flex-shrink: 0;
 `;
 const Handle = styled.div`
@@ -106,11 +88,11 @@ export const ResizableContainer = React.forwardRef(function (
 
     useEffect(() => {
         if (isSidebarOpen) {
-            setIsOpen(true);
+            setNewWidth(initialWidth);
         } else {
-            setIsOpen(false);
+            setNewWidth(0);
         }
-    }, [isSidebarOpen]);
+    }, [isSidebarOpen, initialWidth]);
 
     const mouseDownHandler = (e) => {
         const { clientX } = e;
@@ -181,28 +163,25 @@ export const ResizableContainer = React.forwardRef(function (
     }, [isResizing]);
 
     return (
-        <Wrapper drawer={drawer}>
-            <Container
-                drawer={drawer}
-                className={className + (!isOpen ? " closed" : " open")}
-                ref={containerRef}
-                width={newWidth}
-                style={{ width: newWidth }}
-                isResizing={isResizing}
-            >
-                {children}
-                {!drawer && (
-                    <Handle
-                        onMouseDown={mouseDownHandler}
-                        isResizing={isResizing}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        onDoubleClick={handleDoubleClick}
-                        hoverActive={hoverActive}
-                        ref={handleRef}
-                    />
-                )}
-            </Container>
-        </Wrapper>
+        <Container
+            className={className}
+            ref={containerRef}
+            width={newWidth}
+            style={{ width: newWidth }}
+            isResizing={isResizing}
+        >
+            {children}
+            {!drawer && (
+                <Handle
+                    onMouseDown={mouseDownHandler}
+                    isResizing={isResizing}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    onDoubleClick={handleDoubleClick}
+                    hoverActive={hoverActive}
+                    ref={handleRef}
+                />
+            )}
+        </Container>
     );
 });
