@@ -359,6 +359,8 @@ const Example = () => {
                                         controls.addSidebar(
                                             <CompanySettings />
                                         );
+
+                                        setSidebarNumber(controls.length());
                                     }
                                 }}
                             >
@@ -369,6 +371,7 @@ const Example = () => {
                                 inverted
                                 onClick={() => {
                                     controls.popStack();
+                                    setSidebarNumber(controls.length());
                                 }}
                             >
                                 Pop sidebar
