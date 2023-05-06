@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import MenuIcon from '../icons/MenuIcon';
+import { useControls } from '../SidebarsContextProvider';
 
 const HeaderContainer = styled.header`
   height: 60px;
@@ -27,6 +28,7 @@ const MenuButton = styled.div`
 `;
 
 const Header = ({ siderRef, children }) => {
+    const controls = useControls();
 
     const toggleSidebar = () => {
         if (siderRef.current) {
@@ -37,9 +39,9 @@ const Header = ({ siderRef, children }) => {
 
     return (
         <HeaderContainer>
-            <MenuButton onClick={toggleSidebar}>
+            {controls.length() > 0 &&<MenuButton onClick={toggleSidebar}>
                 <MenuIcon />
-            </MenuButton>
+            </MenuButton>}
             {children}
         </HeaderContainer>
     );
