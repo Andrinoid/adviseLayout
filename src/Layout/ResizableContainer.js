@@ -1,44 +1,71 @@
-import React, { useState, useRef, useEffect, useImperativeHandle, useContext } from "react";
+import React, {
+    useState,
+    useRef,
+    useEffect,
+    useImperativeHandle,
+    useContext,
+} from "react";
 import styled from "styled-components";
 import { Context } from "./LayoutContextProvider";
 
+const Wrapper = styled.div`
+    height: 100%;
+    width: 100%;
+
+    .closed {
+        transform: scale(0.95);
+        opacity: 0;
+        width: ${({ drawer }) => (!drawer ? "0px !important" : "100%")};
+    }
+
+    .open {
+        transform: scale(1);
+        opacity: 1;
+    }
+`;
 const Container = styled.div`
-  position: relative;
-  height: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  flex-grow: 0;
-  user-select: none;
-  transition: width 0.2s ease;
-  transition: ${({ isResizing }) => (isResizing ? "none" : "width 0.2s ease")};
-  flex-shrink: 0;
+    position: relative;
+    height: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    flex-grow: 0;
+    user-select: none;
+    transition: ${({ isResizing, drawer }) => {
+        if (!drawer) {
+            return isResizing ? "none" : "width 0.2s ease";
+        }
+        return "all 0.3s ease"
+    }};
+    flex-shrink: 0;
 `;
 const Handle = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 4px;
-  height: 100%;
-  cursor: col-resize;
-  background-color: ${({ hoverActive, isResizing }) => (hoverActive || isResizing ? "rgb(232 232 232 / 79%)" : "transparent")};
-  transition: background-color 0.3s ease;
-  &:hover {
-    background-color: rgb(232 232 232 / 79%);
-    transition: background-color 0.5s ease;
-    transition-delay: 0.5s;
-  }
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    cursor: col-resize;
+    background-color: ${({ hoverActive, isResizing }) =>
+        hoverActive || isResizing ? "rgb(232 232 232 / 79%)" : "transparent"};
+    transition: background-color 0.3s ease;
+    &:hover {
+        background-color: rgb(232 232 232 / 79%);
+        transition: background-color 0.5s ease;
+        transition-delay: 0.5s;
+    }
 `;
 
-export const ResizableContainer = React.forwardRef(function ({
-    children,
-    initialWidth = 320,
-    minWidth = 0,
-    maxWidth = Infinity,
-    className,
-    drawer = false,
-},
-    ref) {
-
+export const ResizableContainer = React.forwardRef(function (
+    {
+        children,
+        initialWidth = 320,
+        minWidth = 0,
+        maxWidth = Infinity,
+        className,
+        drawer = false,
+    },
+    ref
+) {
     const { isSidebarOpen, setIsSidebarOpen } = useContext(Context);
     const containerRef = useRef(null);
     const handleRef = useRef(null);
@@ -48,6 +75,7 @@ export const ResizableContainer = React.forwardRef(function ({
     const [x, setX] = useState(0);
     const [newWidth, setNewWidth] = useState(initialWidth);
     const [isResizing, setIsResizing] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const [hoverActive, setHoverActive] = useState(false);
     const hoverTimeout = useRef(null);
@@ -66,7 +94,7 @@ export const ResizableContainer = React.forwardRef(function ({
     useImperativeHandle(ref, () => ({
         toggle() {
             toggleOpen();
-        }
+        },
     }));
 
     const toggleOpen = () => {
@@ -78,12 +106,11 @@ export const ResizableContainer = React.forwardRef(function ({
 
     useEffect(() => {
         if (isSidebarOpen) {
-            setNewWidth(initialWidth);
+            setIsOpen(true);
         } else {
-
-            setNewWidth(0);
+            setIsOpen(false);
         }
-    }, [isSidebarOpen, initialWidth]);
+    }, [isSidebarOpen]);
 
     const mouseDownHandler = (e) => {
         const { clientX } = e;
@@ -154,22 +181,28 @@ export const ResizableContainer = React.forwardRef(function ({
     }, [isResizing]);
 
     return (
-        <Container
-            className={className}
-            ref={containerRef}
-            style={{ width: newWidth }}
-            isResizing={isResizing}
-        >
-            {children}
-            {!drawer && <Handle
-                onMouseDown={mouseDownHandler}
+        <Wrapper drawer={drawer}>
+            <Container
+                drawer={drawer}
+                className={className + (!isOpen ? " closed" : " open")}
+                ref={containerRef}
+                width={newWidth}
+                style={{ width: newWidth }}
                 isResizing={isResizing}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                onDoubleClick={handleDoubleClick}
-                hoverActive={hoverActive}
-                ref={handleRef}
-            />}
-        </Container>
+            >
+                {children}
+                {!drawer && (
+                    <Handle
+                        onMouseDown={mouseDownHandler}
+                        isResizing={isResizing}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                        onDoubleClick={handleDoubleClick}
+                        hoverActive={hoverActive}
+                        ref={handleRef}
+                    />
+                )}
+            </Container>
+        </Wrapper>
     );
 });

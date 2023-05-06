@@ -4,6 +4,7 @@ import { ResizableContainer } from "./ResizableContainer";
 import Header from "./Header";
 import LayoutContextProvider from "./LayoutContextProvider";
 import { useControls } from "./SidebarsContextProvider";
+import Drawer from "./Drawer";
 
 const fadeIn = keyframes`
   from {
@@ -62,28 +63,47 @@ const Footer = styled.footer`
     box-shadow: inset 0px 1px 0px #e8eaed;
 `;
 
+const SiderContainer = styled.div`
+    position: relative;
+`;
+
 const Sider = React.forwardRef(
     ({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
         const controls = useControls();
-        
+
         return (
             // <Transition fadeIn={!!sidebarContent}>
-            <>
+            <SiderContainer>
                 {controls.getSidebars().map((sidebar, index) => {
-                    return (
-                        <ResizableContainer
-                            drawer={index != 0}
-                            initialWidth={width}
-                            minWidth={minWidth}
-                            maxWidth={maxWidth}
-                            ref={ref}
-                            className={className}
-                        >
-                            {sidebar.top() || children}
-                        </ResizableContainer>
-                    );
+                    if (sidebar.drawer) {
+                        return (
+                            <Drawer
+                                index={index}
+                                drawer={sidebar.drawer}
+                                initialWidth={width}
+                                minWidth={minWidth}
+                                maxWidth={maxWidth}
+                                ref={ref}
+                                className={className}
+                            >
+                                {sidebar.top() || children}
+                            </Drawer>
+                        );
+                    } else {
+                        return (
+                            <ResizableContainer
+                                initialWidth={width}
+                                minWidth={minWidth}
+                                maxWidth={maxWidth}
+                                ref={ref}
+                                className={className}
+                            >
+                                {sidebar.top() || children}
+                            </ResizableContainer>
+                        );
+                    }
                 })}
-            </>
+            </SiderContainer>
             // </Transition>
         );
     }

@@ -5,11 +5,17 @@ export const SidebarsContext = createContext();
 
 export class Stack {
     data = [];
+    drawer = false;
 
     constructor(component) {
-        if (component) {
-            this.data.push(component);
+        if (component.drawer !== undefined) {
+            this.drawer = component.drawer;
+        } else {
+            if (component) {
+                this.data.push(component);
+            }
         }
+
     }
 
     top() {
@@ -31,7 +37,7 @@ export class Stack {
 
 // Provider component
 export function SidebarsProvider({ children }) {
-    const [sidebars, setSidebars] = useState([new Stack()]);
+    const [sidebars, setSidebars] = useState([new Stack({ drawer: false }), new Stack({ drawer: true }), new Stack({ drawer: true })]);
 
     return (
         <SidebarsContext.Provider value={{ sidebars, setSidebars }}>
