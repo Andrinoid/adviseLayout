@@ -50,20 +50,20 @@ export function useControls() {
 
     const { sidebars, setSidebars } = context;
 
-    function getSidebar(number = 1) {
+    const getSidebar = function (number = 1) {
         if (number > 0 && number <= sidebars.length) {
             return sidebars[number - 1];
         }
 
         return null;
-    }
+    };
 
     function getSidebars() {
         return sidebars;
     }
 
     function addToSidebar(content, number = 1) {
-        if (number > 0 && number <= sidebars.length) {
+        if (sidebars[number - 1]) {
             sidebars[number - 1].push(content);
 
             setSidebars(Object.assign([], sidebars));
@@ -77,11 +77,10 @@ export function useControls() {
     }
 
     function popSidebar(number) {
-        if (!number || number < 1 || number > sidebars.length)
-            throw new Error("Sidebar number out of range");
-
-        sidebars[number - 1].pop();
-        setSidebars(Object.assign([], sidebars));
+        if (sidebars[number - 1]) {
+            sidebars[number - 1].pop();
+            setSidebars(Object.assign([], sidebars));
+        }
     }
 
     function length() {
@@ -89,20 +88,18 @@ export function useControls() {
     }
 
     function popStack() {
-        if (sidebars.length > 1) {
-            sidebars.pop();
-            setSidebars(Object.assign([], sidebars));
-        }
+        sidebars.pop();
+        setSidebars(Object.assign([], sidebars));
     }
 
     function popStacks() {
-        if (sidebars.length > 1) {
-            for (let i = 0; i < sidebars.length; i++) {
-                sidebars.pop();
-            }
+        const length = sidebars.length;
 
-            setSidebars(Object.assign([], sidebars));
+        for (let i = 0; i < length; i++) {
+            sidebars.pop();
         }
+
+        setSidebars(Object.assign([], sidebars));
     }
 
     return {

@@ -211,7 +211,8 @@ const Example = () => {
 
     const changeSidebar = (number) => {
         if (number) {
-            if (controls.getSidebar(number).length() % 2 == 0) {
+            const sidebar = controls.getSidebar(number)
+            if (sidebar && sidebar.length() % 2 == 0) {
                 controls.addToSidebar(<SidabarControls />, number);
             } else {
                 controls.addToSidebar(<DatasourcesSettings />, number);
@@ -340,7 +341,7 @@ const Example = () => {
                                 }}
                             >
                                 sidebar {sidebarNumber} stack size{" "}
-                                {controls.getSidebar(sidebarNumber).length()}
+                                {controls.getSidebar(sidebarNumber) && controls.getSidebar(sidebarNumber).length()}
                             </span>
                         </Flex>
 
@@ -373,14 +374,14 @@ const Example = () => {
                                 Pop sidebar
                             </ControlButton>
 
-                            <ControlButton
+                            {/* <ControlButton
                                 inverted
                                 onClick={() => {
                                     controls.popStacks();
                                 }}
                             >
                                 Pop sidebars
-                            </ControlButton>
+                            </ControlButton> */}
                         </Flex>
                     </MainArea>
                     {/* just for demostation */}
