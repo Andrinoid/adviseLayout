@@ -273,7 +273,11 @@ const Example = () => {
                 <Content>
                     {/* just for demostation */}
                     <MainArea>
-                        <Flex justifyContent="center" alignItems="center" flexDirection="column">
+                        <Flex
+                            justifyContent="center"
+                            alignItems="center"
+                            flexDirection="column"
+                        >
                             <Flex
                                 flexDirection="column"
                                 minHeight={100}
@@ -367,13 +371,12 @@ const Example = () => {
                                 <ControlButton
                                     inverted
                                     onClick={() => {
-                                        if (controls.length() < 3) {
-                                            controls.addSidebar(
-                                                <CompanySettings />, { drawer: false }
-                                            );
+                                        controls.addSidebar(
+                                            <CompanySettings />,
+                                            { drawer: false }
+                                        );
 
-                                            setSidebarNumber(controls.length());
-                                        }
+                                        setSidebarNumber(controls.length());
                                     }}
                                 >
                                     Add sidebar
@@ -382,13 +385,12 @@ const Example = () => {
                                 <ControlButton
                                     inverted
                                     onClick={() => {
-                                        if (controls.length() < 3) {
-                                            controls.addSidebar(
-                                                <CompanySettings />, { drawer: true }
-                                            );
+                                        controls.addSidebar(
+                                            <CompanySettings />,
+                                            { drawer: true }
+                                        );
 
-                                            setSidebarNumber(controls.length());
-                                        }
+                                        setSidebarNumber(controls.length());
                                     }}
                                 >
                                     Add drawer
