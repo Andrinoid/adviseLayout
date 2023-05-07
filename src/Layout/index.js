@@ -51,14 +51,18 @@ const LayoutContainer = styled.section`
     }}
 `;
 
+const footerHeight = 38;
+
 const Content = styled.main`
     display: block;
     flex: 1 1 auto;
     user-select: none;
+    overflow-y: scroll;
+    padding-bottom: ${footerHeight}px;
 `;
 
 const Footer = styled.footer`
-    height: 38px;
+    height: ${footerHeight}px;
     background-color: #f8fafb;
     box-shadow: inset 0px 1px 0px #e8eaed;
     position: fixed;
