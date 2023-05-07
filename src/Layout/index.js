@@ -106,9 +106,11 @@ const Sider = React.forwardRef(
                     .filter((s) => s.drawer)
                     .map((sidebar, index) => {
                         return (
-                            <Transition fadeIn={sidebar.data.length > 0}>
+                            <Transition
+                                key={index}
+                                fadeIn={sidebar.data.length > 0}
+                            >
                                 <Drawer
-                                    key={index}
                                     index={index + 1}
                                     drawer={sidebar.drawer}
                                     initialWidth={width}
