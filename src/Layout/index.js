@@ -65,6 +65,7 @@ const Footer = styled.footer`
 
 const SiderContainer = styled.div`
     position: relative;
+    display: flex;
 `;
 
 const Sider = React.forwardRef(

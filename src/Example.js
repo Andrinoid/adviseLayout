@@ -125,6 +125,9 @@ const ControlButton = styled.button`
     height: 60px;
     cursor: pointer;
     font-weight: bold;
+    width: 100%;
+    max-width: 125px;
+    margin-bottom: 10px;
 `;
 
 const Flex = styled.div`
@@ -137,6 +140,7 @@ const Flex = styled.div`
     border: ${(props) => props.dashed && "2px dashed rgb(66, 82, 110)"};
     width: ${(props) => props.width}px;
     padding: ${(props) => props.padding}px;
+    flex-wrap: wrap;
 `;
 
 Flex.defaultProps = {
@@ -314,7 +318,7 @@ const Example = () => {
                                     }}
                                 />
                                 <Flex
-                                    justifyContent="space-between"
+                                    justifyContent="space-around"
                                     style={{
                                         width: 350,
                                         marginBottom: 20,
@@ -365,7 +369,7 @@ const Example = () => {
                                     onClick={() => {
                                         if (controls.length() < 3) {
                                             controls.addSidebar(
-                                                <CompanySettings />
+                                                <CompanySettings />, { drawer: false }
                                             );
 
                                             setSidebarNumber(controls.length());
@@ -373,6 +377,21 @@ const Example = () => {
                                     }}
                                 >
                                     Add sidebar
+                                </ControlButton>
+
+                                <ControlButton
+                                    inverted
+                                    onClick={() => {
+                                        if (controls.length() < 3) {
+                                            controls.addSidebar(
+                                                <CompanySettings />, { drawer: true }
+                                            );
+
+                                            setSidebarNumber(controls.length());
+                                        }
+                                    }}
+                                >
+                                    Add drawer
                                 </ControlButton>
 
                                 <ControlButton
