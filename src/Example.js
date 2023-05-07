@@ -401,7 +401,7 @@ const Example = () => {
                                         setSidebarNumber(controls.length());
                                     }}
                                 >
-                                    Pop sidebar
+                                    Pop
                                 </ControlButton>
 
                                 <ControlButton
@@ -411,7 +411,7 @@ const Example = () => {
                                         setSidebarNumber(controls.length());
                                     }}
                                 >
-                                    Pop sidebars
+                                    Pop all
                                 </ControlButton>
                             </Flex>
                         </Flex>

@@ -39,7 +39,7 @@ const Header = ({ siderRef, children }) => {
 
     return (
         <HeaderContainer>
-            {controls.length() > 0 &&<MenuButton onClick={toggleSidebar}>
+            {controls.getSidebars().filter(s => !s.drawer).length > 0 &&<MenuButton onClick={toggleSidebar}>
                 <MenuIcon />
             </MenuButton>}
             {children}

@@ -79,6 +79,7 @@ const Sider = React.forwardRef(
                     if (sidebar.drawer) {
                         return (
                             <Drawer
+                                key={index}
                                 index={index}
                                 drawer={sidebar.drawer}
                                 initialWidth={width}
@@ -93,6 +94,7 @@ const Sider = React.forwardRef(
                     } else {
                         return (
                             <ResizableContainer
+                                key={index}
                                 initialWidth={width}
                                 minWidth={minWidth}
                                 maxWidth={maxWidth}
