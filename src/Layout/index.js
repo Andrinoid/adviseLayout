@@ -28,11 +28,11 @@ const Transition = styled.div`
     animation: ${(props) =>
         props.fadeIn
             ? css`
-                  ${fadeIn} 0.5s ease-in forwards
+                  ${fadeIn} 0.25s ease-in forwards
               `
             : props.fadeOut
             ? css`
-                  ${fadeOut} 0.5s ease-out forwards
+                  ${fadeOut} 0.25s ease-out forwards
               `
             : "none"};
 `;
@@ -73,23 +73,24 @@ const Sider = React.forwardRef(
         const controls = useControls();
 
         return (
-            // <Transition fadeIn={!!sidebarContent}>
             <SiderContainer>
                 {controls.getSidebars().map((sidebar, index) => {
                     if (sidebar.drawer) {
                         return (
-                            <Drawer
-                                key={index}
-                                index={index}
-                                drawer={sidebar.drawer}
-                                initialWidth={width}
-                                minWidth={minWidth}
-                                maxWidth={maxWidth}
-                                ref={ref}
-                                className={className}
-                            >
-                                {sidebar.top() || children}
-                            </Drawer>
+                            // <Transition fadeIn={sidebar.data.length > 0}>
+                                <Drawer
+                                    key={index}
+                                    index={index}
+                                    drawer={sidebar.drawer}
+                                    initialWidth={width}
+                                    minWidth={minWidth}
+                                    maxWidth={maxWidth}
+                                    ref={ref}
+                                    className={className}
+                                >
+                                    {sidebar.top() || children}
+                                </Drawer>
+                            // </Transition>
                         );
                     } else {
                         return (
@@ -107,7 +108,6 @@ const Sider = React.forwardRef(
                     }
                 })}
             </SiderContainer>
-            // </Transition>
         );
     }
 );

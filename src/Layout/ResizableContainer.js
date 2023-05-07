@@ -87,12 +87,14 @@ export const ResizableContainer = React.forwardRef(function (
     };
 
     useEffect(() => {
-        if (isSidebarOpen) {
-            setNewWidth(initialWidth);
-        } else {
-            setNewWidth(0);
+        if (!drawer) {
+            if (isSidebarOpen) {
+                setNewWidth(initialWidth);
+            } else {
+                setNewWidth(0);
+            }
         }
-    }, [isSidebarOpen, initialWidth]);
+    }, [isSidebarOpen, initialWidth, drawer]);
 
     const mouseDownHandler = (e) => {
         const { clientX } = e;

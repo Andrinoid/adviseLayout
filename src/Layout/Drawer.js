@@ -57,7 +57,7 @@ const Content = styled.div`
     position: absolute;
     top: ${({ top }) => top}px;
     right: ${({ width, index }) => -(width * index)}px;
-    width: 100%;
+    width: auto;
     height: ${({ height }) =>
         typeof height == "string" ? height : height + "px"};
     box-sizing: border-box;
@@ -67,5 +67,5 @@ Content.defaultProps = {
     top: 0,
     left: 0,
     height: "100%",
-    width: "100%",
+    width: "auto",
 };

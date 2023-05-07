@@ -36,8 +36,7 @@ export class Stack {
 
 // Provider component
 export function SidebarsProvider({ children }) {
-    const [sidebars, setSidebars] = useState([
-    ]);
+    const [sidebars, setSidebars] = useState([]);
 
     return (
         <SidebarsContext.Provider value={{ sidebars, setSidebars }}>
@@ -98,10 +97,20 @@ export function useControls() {
         setSidebars(Object.assign([], sidebars));
     }
 
-    function popStacks() {
+    function popStacks(type = null) {
         const length = sidebars.length;
 
         for (let i = 0; i < length; i++) {
+            const sidebar = sidebars[sidebars.length - 1];
+
+            if (type == "drawer" && !sidebar.drawer) {
+                continue;
+            }
+
+            if (type == 'sidebar' && sidebar.drawer) {
+                continue;
+            }
+
             sidebars.pop();
         }
 

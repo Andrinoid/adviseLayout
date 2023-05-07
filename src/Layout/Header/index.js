@@ -1,13 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
-import MenuIcon from '../icons/MenuIcon';
-import { useControls } from '../SidebarsContextProvider';
+import React from "react";
+import styled from "styled-components";
+import MenuIcon from "../icons/MenuIcon";
+import { useControls } from "../SidebarsContextProvider";
 
 const HeaderContainer = styled.header`
-  height: 60px;
-  background-color: #f8fafb;
-  flex: 0 0 auto;
-  user-select: none;
+    height: 60px;
+    background-color: #f8fafb;
+    flex: 0 0 auto;
+    user-select: none;
 `;
 
 const MenuButton = styled.div`
@@ -20,7 +20,7 @@ const MenuButton = styled.div`
     // background-color: #f6f6f6;
     font-size: 19px;
     &:hover {
-        background-color: rgba(0,0,0,.04);
+        background-color: rgba(0, 0, 0, 0.04);
     }
     &:active {
         background-color: rgba(0, 0, 0, 0.08);
@@ -33,15 +33,17 @@ const Header = ({ siderRef, children }) => {
     const toggleSidebar = () => {
         if (siderRef.current) {
             siderRef.current.toggle();
+            controls.popStacks("drawer");
         }
     };
 
-
     return (
         <HeaderContainer>
-            {controls.getSidebars().filter(s => !s.drawer).length > 0 &&<MenuButton onClick={toggleSidebar}>
-                <MenuIcon />
-            </MenuButton>}
+            {controls.getSidebars().filter((s) => !s.drawer).length > 0 && (
+                <MenuButton onClick={toggleSidebar}>
+                    <MenuIcon />
+                </MenuButton>
+            )}
             {children}
         </HeaderContainer>
     );
