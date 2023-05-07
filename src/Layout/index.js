@@ -83,25 +83,10 @@ const Sider = React.forwardRef(
 
         return (
             <SiderContainer>
-                {controls.getSidebars().map((sidebar, index) => {
-                    if (sidebar.drawer) {
-                        return (
-                            // <Transition fadeIn={sidebar.data.length > 0}>
-                                <Drawer
-                                    key={index}
-                                    index={index}
-                                    drawer={sidebar.drawer}
-                                    initialWidth={width}
-                                    minWidth={minWidth}
-                                    maxWidth={maxWidth}
-                                    ref={ref}
-                                    className={className}
-                                >
-                                    {sidebar.top() || children}
-                                </Drawer>
-                            // </Transition>
-                        );
-                    } else {
+                {controls
+                    .getSidebars()
+                    .filter((s) => !s.drawer)
+                    .map((sidebar, index) => {
                         return (
                             <ResizableContainer
                                 key={index}
@@ -114,8 +99,29 @@ const Sider = React.forwardRef(
                                 {sidebar.top() || children}
                             </ResizableContainer>
                         );
-                    }
-                })}
+                    })}
+
+                {controls
+                    .getSidebars()
+                    .filter((s) => s.drawer)
+                    .map((sidebar, index) => {
+                        return (
+                            <Transition fadeIn={sidebar.data.length > 0}>
+                                <Drawer
+                                    key={index}
+                                    index={index + 1}
+                                    drawer={sidebar.drawer}
+                                    initialWidth={width}
+                                    minWidth={minWidth}
+                                    maxWidth={maxWidth}
+                                    ref={ref}
+                                    className={className}
+                                >
+                                    {sidebar.top() || children}
+                                </Drawer>
+                            </Transition>
+                        );
+                    })}
             </SiderContainer>
         );
     }
