@@ -68,7 +68,7 @@ const Content = styled.main`
     padding-bottom: ${footerHeight}px;
 `;
 
-const Footer = styled.footer`
+const FooterContainer = styled.footer`
     height: ${footerHeight}px;
     background-color: #f8fafb;
     box-shadow: inset 0px 1px 0px #e8eaed;
@@ -97,6 +97,10 @@ const SidebarLinksContainer = styled.div`
     left: 0;
     z-index: 1;
 `;
+
+const Footer = ({ children }) => {
+    return <FooterContainer>{children}</FooterContainer>;
+};
 
 const SidebarLinks = ({ children }) => {
     return <SidebarLinksContainer>{children}</SidebarLinksContainer>;
