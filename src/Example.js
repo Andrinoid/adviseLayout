@@ -1,5 +1,5 @@
 import React, { useRef, useContext, useState } from "react";
-import { Layout, Sider, Header, Content, Footer } from "./Layout";
+import { Layout, Sider, Header, Content, Footer, SidebarLinks } from "./Layout";
 import styled from "styled-components";
 import { useControls } from "./Layout/SidebarsContextProvider";
 
@@ -102,16 +102,6 @@ const ListItem = styled.div`
         height: auto;
         max-width: 60px;
     }
-`;
-
-const SidebarLinks = styled.div`
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 60px;
-    background-color: #242a43;
-    border-right: 1px solid rgb(232, 232, 232);
-    background: #f8fafb;
 `;
 
 const ControlButton = styled.button`

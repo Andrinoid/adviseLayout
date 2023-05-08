@@ -45,8 +45,15 @@ const LayoutContainer = styled.section`
     ${({ isParent }) => {
         if (isParent) {
             return `
-      flex-direction: row;
-      `;
+                flex-direction: row;
+            `;
+        }
+    }}
+    ${({ hasSidebarLinks }) => {
+        if (hasSidebarLinks) {
+            return `
+                padding-left: 60px;
+            `;
         }
     }}
 `;
@@ -76,6 +83,25 @@ const SiderContainer = styled.div`
     position: relative;
     display: flex;
 `;
+
+const SidebarLinksContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 60px;
+    background-color: #242a43;
+    border-right: 1px solid rgb(232, 232, 232);
+    background: #f8fafb;
+    flex-shrink: 0;
+    position: fixed;
+    left: 0;
+    z-index: 1;
+`;
+
+const SidebarLinks = ({ children }) => {
+    return <SidebarLinksContainer>{children}</SidebarLinksContainer>;
+};
+
 
 const Sider = React.forwardRef(
     ({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
@@ -129,15 +155,20 @@ const Sider = React.forwardRef(
 
 const Layout = ({ children }) => {
     let isParent = false;
+    let hasSidebarLinks = false;
     // Check if Layout is Layout parent
     React.Children.forEach(children, (child) => {
         if (child.type.name === "Layout") {
             isParent = true;
         }
+        // Check if Layout has SidebarLinks
+        if (child.type.name === "SidebarLinks") {
+            hasSidebarLinks = true;
+        }
     });
 
     const layoutContent = (
-        <LayoutContainer isParent={isParent}>{children}</LayoutContainer>
+        <LayoutContainer hasSidebarLinks={hasSidebarLinks} isParent={isParent}>{children}</LayoutContainer>
     );
 
     //only render the LayoutContextProveder on the parent Layout
@@ -148,4 +179,4 @@ const Layout = ({ children }) => {
     );
 };
 
-export { Layout, Sider, Header, Content, Footer };
+export { Layout, Sider, SidebarLinks, Header, Content, Footer };
