@@ -197,7 +197,7 @@ const Sider = React.forwardRef(
 const Layout = ({ children }) => {
     const controls = useControls();
 
-    const siders = controls.getSidebars();
+    const siders = controls.getSidebars().filter((s) => !s.drawer);
 
     let isParent = false;
     let hasSidebarLinks = false;
