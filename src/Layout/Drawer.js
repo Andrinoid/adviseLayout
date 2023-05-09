@@ -55,11 +55,10 @@ export default React.forwardRef(Drawer);
 
 const Content = styled.div`
     position: absolute;
-    top: ${({ top }) => top}px;
+    // top: ${({ top }) => top}px;
     right: ${({ width, index }) => -(width * index)}px;
     width: auto;
-    height: ${({ height }) =>
-        typeof height == "string" ? height : height + "px"};
+    height: 100%;
     box-sizing: border-box;
 `;
 

@@ -1,5 +1,5 @@
 import React, { useRef, useContext, useState } from "react";
-import { Layout, Sider, Header, Content, Footer, SidebarLinks } from "./Layout";
+import { Layout, Sider, Header, Content, Footer, SidebarLinks, SideBarPanel } from "./Layout";
 import styled from "styled-components";
 import { useControls } from "./Layout/SidebarsContextProvider";
 
@@ -158,7 +158,7 @@ const SidabarControls = () => {
                     min="1"
                     max="100"
                     value="50"
-                    onChange={() => {}}
+                    onChange={() => { }}
                 ></input>
             </MainArea>
         </>
@@ -216,52 +216,60 @@ const Example = () => {
 
     return (
         <Layout>
-            <SidebarLinks>
-                <SiderTop padding={12}>
-                    <img
-                        src={process.env.PUBLIC_URL + "/advise.png"}
-                        alt="Logo"
-                        style={{ width: "100%", height: "auto", maxWidth: 60 }}
-                    />
-                </SiderTop>
-                <ListItem
-                    onClick={() => {
-                        controls.addToSidebar(
-                            <DatasourcesSettings />,
-                            sidebarNumber
-                        );
-                    }}
-                >
-                    <img src={process.env.PUBLIC_URL + "/home.svg"} />
-                </ListItem>
-                <ListItem
-                    onClick={() => {
-                        controls.addToSidebar(
-                            <CompanySettings />,
-                            sidebarNumber
-                        );
-                    }}
-                >
-                    <img src={process.env.PUBLIC_URL + "/gear.svg"} />
-                </ListItem>
-            </SidebarLinks>
 
-            <StyledSider ref={siderRef} width={260}>
-                <SiderContext>
-                    <SiderTop>
-                        <b>Company Name</b>
+            <SideBarPanel>
+
+                <SidebarLinks>
+                    {/* app code */}
+                    <SiderTop padding={12}>
+                        <img
+                            src={process.env.PUBLIC_URL + "/advise.png"}
+                            alt="Logo"
+                            style={{ width: "100%", height: "auto", maxWidth: 60 }}
+                        />
                     </SiderTop>
-                    <SiderMain>
-                        <ListItem>Default children case content null</ListItem>
-                    </SiderMain>
-                    <SiderFooter>footer</SiderFooter>
-                </SiderContext>
-            </StyledSider>
+                    <ListItem
+                        onClick={() => {
+                            controls.addToSidebar(
+                                <DatasourcesSettings />,
+                                sidebarNumber
+                            );
+                        }}
+                    >
+                        <img src={process.env.PUBLIC_URL + "/home.svg"} />
+                    </ListItem>
+                    <ListItem
+                        onClick={() => {
+                            controls.addToSidebar(
+                                <CompanySettings />,
+                                sidebarNumber
+                            );
+                        }}
+                    >
+                        <img src={process.env.PUBLIC_URL + "/gear.svg"} />
+                    </ListItem>
+                    {/* app code */}
+                </SidebarLinks>
+
+                <StyledSider ref={siderRef} width={260}>
+                    {/* app code */}
+                    <SiderContext>
+                        <SiderTop>
+                            <b>Company Name</b>
+                        </SiderTop>
+                        <SiderMain>
+                            <ListItem>Default children case content null</ListItem>
+                        </SiderMain>
+                        <SiderFooter>footer</SiderFooter>
+                    </SiderContext>
+                    {/* app code */}
+                </StyledSider>
+            </SideBarPanel>
 
             <Layout>
                 <Header siderRef={siderRef}></Header>
                 <Content>
-                    {/* just for demostation */}
+                    {/* app code */}
                     <MainArea>
                         <Flex
                             justifyContent="center"
@@ -408,17 +416,17 @@ const Example = () => {
                             </Flex>
                         </Flex>
                     </MainArea>
-                    {/* just for demostation */}
+                    {/* app code */}
                 </Content>
                 <Footer>
-                    {/* just for demostation */}
+                    {/* app code */}
                     <Tabs>
                         <Tab>Actual</Tab>
                         <Tab>Budget</Tab>
                         <Tab>Comparison</Tab>
                         <Tab>Dashboard</Tab>
                     </Tabs>
-                    {/* just for demostation */}
+                    {/* app code */}
                 </Footer>
             </Layout>
         </Layout>

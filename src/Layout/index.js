@@ -37,11 +37,17 @@ const Transition = styled.div`
             : "none"};
 `;
 
+const footerHeight = 38;
+const sidebarLinksWidth = 60;
+const headerHeight = 60;
 const LayoutContainer = styled.section`
     display: flex;
     flex-direction: column;
     height: 100vh;
     flex: 1;
+    box-sizing: border-box;
+    padding-left: ${({ paddingLeft }) => paddingLeft}px;
+    transition: padding-left 0.2s ease; 
     ${({ isParent }) => {
         if (isParent) {
             return `
@@ -49,23 +55,40 @@ const LayoutContainer = styled.section`
             `;
         }
     }}
-    ${({ hasSidebarLinks }) => {
-        if (hasSidebarLinks) {
+
+    ${({ hasHeader }) => {
+        if (hasHeader) {
             return `
-                padding-left: 60px;
+                padding-top: ${headerHeight}px;
+                `;
+        }
+    }}
+    ${({ hasFooter }) => {
+        if (hasFooter) {
+            return `
+                padding-bottom: ${footerHeight}px;
             `;
         }
     }}
+
 `;
 
-const footerHeight = 38;
+const LayoutContainerParent = styled.section`
+    display: flex;
+    flex-direction: flow;
+    height: 100vh;
+    flex: 1;
+    box-sizing: border-box;
+`;
+
 
 const Content = styled.main`
     display: block;
     flex: 1 1 auto;
     user-select: none;
     overflow-y: scroll;
-    padding-bottom: ${footerHeight}px;
+    // padding-bottom: ${footerHeight}px;
+    padding-left: ${({ paddingLeft }) => paddingLeft}px;
 `;
 
 const FooterContainer = styled.footer`
@@ -82,6 +105,7 @@ const FooterContainer = styled.footer`
 const SiderContainer = styled.div`
     position: relative;
     display: flex;
+    height: 100%;
 `;
 
 const SidebarLinksContainer = styled.div`
@@ -98,11 +122,27 @@ const SidebarLinksContainer = styled.div`
     z-index: 1;
 `;
 
+const SideBarPanelContainer = styled.div`
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    z-index: 1;
+    padding-left: 60px;
+`;
+
+const SideBarPanel = ({ children }) => {
+    return <SideBarPanelContainer>{children}</SideBarPanelContainer>;
+};
+
 const Footer = ({ children }) => {
     return <FooterContainer>{children}</FooterContainer>;
 };
 
 const SidebarLinks = ({ children }) => {
+
+
     return <SidebarLinksContainer>{children}</SidebarLinksContainer>;
 };
 
@@ -158,29 +198,52 @@ const Sider = React.forwardRef(
 );
 
 const Layout = ({ children }) => {
+
+    const controls = useControls();
+
+    const siders = controls
+        .getSidebars()
+        .filter((s) => !s.drawer);
+
+
     let isParent = false;
     let hasSidebarLinks = false;
+    let hasHeader = false;
+    let hasFooter = false;
+
+
     // Check if Layout is Layout parent
     React.Children.forEach(children, (child) => {
         if (child.type.name === "Layout") {
             isParent = true;
         }
-        // Check if Layout has SidebarLinks
-        if (child.type.name === "SidebarLinks") {
-            hasSidebarLinks = true;
+        // // Check if Layout has SidebarLinks
+        // if (child.type.name === "SidebarLinks") {
+        //     hasSidebarLinks = true;
+        // }
+        // Check if Layout has Header
+        if (child.type.name === "Header") {
+            hasHeader = true;
+        }
+        // Check if Layout has Footer
+        if (child.type.name === "Footer") {
+            hasFooter = true;
         }
     });
 
-    const layoutContent = (
-        <LayoutContainer hasSidebarLinks={hasSidebarLinks} isParent={isParent}>{children}</LayoutContainer>
-    );
+    const sidebarWidth = 260;
+
 
     //only render the LayoutContextProveder on the parent Layout
     return isParent ? (
-        <LayoutContextProvider>{layoutContent}</LayoutContextProvider>
+        <LayoutContextProvider>
+            <LayoutContainerParent>{children}</LayoutContainerParent>
+        </LayoutContextProvider>
     ) : (
-        layoutContent
+            <LayoutContainer paddingLeft={60 + siders.length * sidebarWidth} hasFooter={hasFooter} hasHeader={hasHeader} hasSidebarLinks={hasSidebarLinks} isParent={isParent}>
+                {children}
+            </LayoutContainer>
     );
 };
 
-export { Layout, Sider, SidebarLinks, Header, Content, Footer };
+export { Layout, Sider, SidebarLinks, Header, Content, Footer, SideBarPanel };
