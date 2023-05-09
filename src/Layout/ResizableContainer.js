@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import { Context } from "./LayoutContextProvider";
+import { useControls } from "./SidebarsContextProvider";
 
 const Container = styled.div`
     position: relative;
@@ -15,7 +16,7 @@ const Container = styled.div`
     box-sizing: border-box;
     flex-grow: 0;
     user-select: none;
-    transition: width 0.2s ease;
+    transition: width 0.2s ease, opacity 0.1s ease;
     transition: ${({ isResizing }) =>
         isResizing ? "none" : "width 0.2s ease"};
     flex-shrink: 0;
@@ -164,12 +165,15 @@ export const ResizableContainer = React.forwardRef(function (
         };
     }, [isResizing]);
 
+    const controls = useControls();
+
+    const header = controls.getHeader();
     return (
         <Container
             className={className}
             ref={containerRef}
             width={newWidth}
-            style={{ width: newWidth }}
+            style={{ width: newWidth, opacity: header.shouldCollapse && header.isCollapsed ? 0 : 1 }}
             isResizing={isResizing}
         >
             {children}
