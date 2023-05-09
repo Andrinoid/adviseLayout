@@ -99,16 +99,10 @@ export function useControls() {
         data.sidebars.push(new Stack(content, config));
 
         if (data.header.shouldCollapse) {
-            const isCollapsed =
-                data.header.isCollapsed && data.sidebars.length == 1
-                    ? false
-                    : data.header.isCollapsed && data.sidebars.length > 0
-                    ? true
-                    : false;
             setData({
                 ...data,
                 sidebars: Object.assign([], data.sidebars),
-                header: { ...data.header, isCollapsed },
+                header: { ...data.header, isCollapsed: false },
             });
         } else {
             setData({ ...data, sidebars: Object.assign([], data.sidebars) });
