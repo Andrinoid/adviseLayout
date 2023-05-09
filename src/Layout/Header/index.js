@@ -12,6 +12,8 @@ const HeaderContainer = styled.header`
     user-select: none;
     position: fixed;
     width: 100%;
+
+    transition: padding-left 0.2s ease;
 `;
 
 const MenuButton = styled.div`
@@ -49,10 +51,14 @@ const Header = ({ siderRef, hasSidebarLinks, children }) => {
         }
     }, [controls, siderRef]);
 
+
+    const amount = controls.getSidebars().filter((s) => s.drawer).length;
+
     return (
         <HeaderContainer hasSidebarLinks={hasSidebarLinks}>
             {controls.getSidebars().filter((s) => !s.drawer).length > 0 && (
-                <MenuButton onClick={toggleSidebar}>
+            
+                <MenuButton onClick={toggleSidebar} style={{ paddingLeft: 260 * amount}}>
                     <MenuIcon />
                 </MenuButton>
             )}
