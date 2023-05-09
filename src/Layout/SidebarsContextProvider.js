@@ -38,7 +38,7 @@ export class Stack {
 export function SidebarsProvider({ children }) {
     const [data, setData] = useState({
         sidebars: [],
-        header: { shouldCollapse: true, isCollapsed: true },
+        header: { shouldCollapse: true, isCollapsed: false },
     });
 
     return (
@@ -96,6 +96,8 @@ export function useControls() {
     }
 
     function addSidebar(content, config) {
+        if (data.header.shouldCollapse && data.header.isCollapsed) return;
+
         data.sidebars.push(new Stack(content, config));
 
         if (data.header.shouldCollapse) {
@@ -127,11 +129,15 @@ export function useControls() {
     }
 
     function popStack() {
+        if (data.header.shouldCollapse && data.header.isCollapsed) return;
+
         data.sidebars.pop();
         setData({ ...data, sidebars: Object.assign([], data.sidebars) });
     }
 
     const popStacks = (type = null) => {
+        if (data.header.shouldCollapse && data.header.isCollapsed) return;
+
         const length = data.sidebars.length;
 
         for (let i = 0; i < length; i++) {

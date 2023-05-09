@@ -1,12 +1,16 @@
 import React, { useEffect, useContext } from "react";
 import { Context } from "../LayoutContextProvider";
+import { useControls } from "../SidebarsContextProvider";
 
 const MenuIcon = () => {
 
     const { isSidebarOpen } = useContext(Context);
 
+    const controls = useControls();
+
     return (
         <svg
+            style={{ marginLeft: 260 * controls.getSidebars().filter((s) => s.drawer)}}
             viewBox="64 64 896 896"
             focusable="false"
             data-icon="menu-unfold"

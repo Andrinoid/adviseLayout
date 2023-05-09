@@ -173,7 +173,7 @@ export const ResizableContainer = React.forwardRef(function (
             className={className}
             ref={containerRef}
             width={newWidth}
-            style={{ width: newWidth, opacity: header.shouldCollapse && header.isCollapsed ? 0 : 1 }}
+            style={{ width: newWidth }}
             isResizing={isResizing}
         >
             {children}
