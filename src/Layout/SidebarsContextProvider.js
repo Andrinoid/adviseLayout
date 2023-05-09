@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 
 // Create Sidebar Content Context
 export const SidebarsContext = createContext();
@@ -36,10 +36,13 @@ export class Stack {
 
 // Provider component
 export function SidebarsProvider({ children }) {
-    const [sidebars, setSidebars] = useState([]);
+    const [data, setData] = useState({
+        sidebars: [],
+        header: { shouldCollapse: true, isCollapsed: true },
+    });
 
     return (
-        <SidebarsContext.Provider value={{ sidebars, setSidebars }}>
+        <SidebarsContext.Provider value={{ data, setData }}>
             {children}
         </SidebarsContext.Provider>
     );
@@ -53,69 +56,92 @@ export function useControls() {
         );
     }
 
-    const { sidebars, setSidebars } = context;
+    const { data, setData } = context;
 
     const getSidebar = function (number = 1) {
-        if (number > 0 && number <= sidebars.length) {
-            return sidebars[number - 1];
+        if (number > 0 && number <= data.sidebars.length) {
+            return data.sidebars[number - 1];
         }
 
         return null;
     };
 
-    function getSidebars() {
-        return sidebars;
+    const getSidebars = () => {
+        return data.sidebars;
+    };
+
+    const getHeader = () => {
+        return data.header;
+    };
+
+    function setShouldCollapse(shouldCollapse) {
+        setData({ ...data, header: { ...data.header, shouldCollapse } });
+    }
+
+    function toggleCollapsed() {
+        const result = {
+            ...data,
+            header: { ...data.header, isCollapsed: !data.header.isCollapsed },
+        };
+
+        setData(result);
     }
 
     function addToSidebar(content, number = 1) {
-        if (sidebars[number - 1]) {
-            sidebars[number - 1].push(content);
+        if (data.sidebars[number - 1]) {
+            data.sidebars[number - 1].push(content);
 
-            setSidebars(Object.assign([], sidebars));
+            setData({ ...data, sidebars: Object.assign([], data.sidebars) });
         }
     }
 
     function addSidebar(content, config) {
-        sidebars.push(new Stack(content, config));
+        data.sidebars.push(new Stack(content, config));
 
-        setSidebars(Object.assign([], sidebars));
+        if (data.header.shouldCollapse) {
+            setData({
+                ...data,
+                sidebars: Object.assign([], data.sidebars),
+                header: { ...data.header, isCollapsed: false },
+            });
+        } else {
+            setData({ ...data, sidebars: Object.assign([], data.sidebars) });
+        }
     }
 
     function popSidebar(number) {
-        if (sidebars[number - 1]) {
-            sidebars[number - 1].pop();
-            setSidebars(Object.assign([], sidebars));
+        if (data.sidebars[number - 1]) {
+            data.sidebars[number - 1].pop();
+            setData({ ...data, sidebars: Object.assign([], data.sidebars) });
         }
     }
 
     function length() {
-        return sidebars.length;
+        return data.sidebars.length;
     }
 
     function popStack() {
-        sidebars.pop();
-        setSidebars(Object.assign([], sidebars));
+        data.sidebars.pop();
+        setData({ ...data, sidebars: Object.assign([], data.sidebars) });
     }
 
-    function popStacks(type = null) {
-        const length = sidebars.length;
+    const popStacks = (type = null) => {
+        const length = data.sidebars.length;
 
         for (let i = 0; i < length; i++) {
-            const sidebar = sidebars[sidebars.length - 1];
+            const sidebar = data.sidebars[data.sidebars.length - 1];
 
             if (type == "drawer" && !sidebar.drawer) {
                 continue;
             }
 
-            if (type == 'sidebar' && sidebar.drawer) {
+            if (type == "sidebar" && sidebar.drawer) {
                 continue;
             }
 
-            sidebars.pop();
+            data.sidebars.pop();
         }
-
-        setSidebars(Object.assign([], sidebars));
-    }
+    };
 
     return {
         getSidebar,
@@ -126,5 +152,8 @@ export function useControls() {
         length,
         popStack,
         popStacks,
+        getHeader,
+        setShouldCollapse,
+        toggleCollapsed,
     };
 }

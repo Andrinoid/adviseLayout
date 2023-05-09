@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 import MenuIcon from "../icons/MenuIcon";
 import { useControls } from "../SidebarsContextProvider";
 
 const HeaderContainer = styled.header`
     position: fixed;
-    top: 0;    
+    top: 0;
     height: 60px;
     background-color: #f8fafb;
     flex: 0 0 auto;
@@ -33,15 +33,21 @@ const MenuButton = styled.div`
 
 const Header = ({ siderRef, hasSidebarLinks, children }) => {
     const controls = useControls();
-    console.log('test', hasSidebarLinks)
-    const toggleSidebar = () => {
-        if (siderRef.current) {
-            siderRef.current.toggle();
 
+    const toggleSidebar = useCallback(() => {
+        const header = controls.getHeader();
+        
+        if (header.shouldCollapse) {
+            controls.toggleCollapsed();
+
+            if (siderRef.current) {
+                siderRef.current.toggle();
+                controls.popStacks("drawer");
+            }
+        } else {
             controls.popStacks();
-
         }
-    };
+    }, [controls, siderRef]);
 
     return (
         <HeaderContainer hasSidebarLinks={hasSidebarLinks}>

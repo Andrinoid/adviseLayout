@@ -47,7 +47,7 @@ const LayoutContainer = styled.section`
     flex: 1;
     box-sizing: border-box;
     padding-left: ${({ paddingLeft }) => paddingLeft}px;
-    transition: padding-left 0.2s ease; 
+    transition: padding-left 0.2s ease;
     ${({ isParent }) => {
         if (isParent) {
             return `
@@ -70,7 +70,6 @@ const LayoutContainer = styled.section`
             `;
         }
     }}
-
 `;
 
 const LayoutContainerParent = styled.section`
@@ -80,7 +79,6 @@ const LayoutContainerParent = styled.section`
     flex: 1;
     box-sizing: border-box;
 `;
-
 
 const Content = styled.main`
     display: block;
@@ -141,11 +139,8 @@ const Footer = ({ children }) => {
 };
 
 const SidebarLinks = ({ children }) => {
-
-
     return <SidebarLinksContainer>{children}</SidebarLinksContainer>;
 };
-
 
 const Sider = React.forwardRef(
     ({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
@@ -176,9 +171,11 @@ const Sider = React.forwardRef(
                     .filter((s) => s.drawer)
                     .map((sidebar, index) => {
                         return (
-                            <Transition key={index} fadeIn={sidebar.data.length > 0}>
+                            <Transition
+                                key={index}
+                                fadeIn={sidebar.data.length > 0}
+                            >
                                 <Drawer
-                                    
                                     index={index + 1}
                                     drawer={sidebar.drawer}
                                     initialWidth={width}
@@ -198,19 +195,14 @@ const Sider = React.forwardRef(
 );
 
 const Layout = ({ children }) => {
-
     const controls = useControls();
 
-    const siders = controls
-        .getSidebars()
-        .filter((s) => !s.drawer);
-
+    const siders = controls.getSidebars();
 
     let isParent = false;
     let hasSidebarLinks = false;
     let hasHeader = false;
     let hasFooter = false;
-
 
     // Check if Layout is Layout parent
     React.Children.forEach(children, (child) => {
@@ -232,6 +224,9 @@ const Layout = ({ children }) => {
     });
 
     const sidebarWidth = 260;
+    const paddingLeft = 60 + siders.length * sidebarWidth;
+
+    const header = controls.getHeader();
 
 
     //only render the LayoutContextProveder on the parent Layout
@@ -240,9 +235,21 @@ const Layout = ({ children }) => {
             <LayoutContainerParent>{children}</LayoutContainerParent>
         </LayoutContextProvider>
     ) : (
-            <LayoutContainer paddingLeft={60 + siders.length * sidebarWidth} hasFooter={hasFooter} hasHeader={hasHeader} hasSidebarLinks={hasSidebarLinks} isParent={isParent}>
-                {children}
-            </LayoutContainer>
+        <LayoutContainer
+            paddingLeft={
+                header.shouldCollapse
+                    ? header.isCollapsed
+                        ? 60
+                        : paddingLeft
+                    : paddingLeft
+            }
+            hasFooter={hasFooter}
+            hasHeader={hasHeader}
+            hasSidebarLinks={hasSidebarLinks}
+            isParent={isParent}
+        >
+            {children}
+        </LayoutContainer>
     );
 };
 
