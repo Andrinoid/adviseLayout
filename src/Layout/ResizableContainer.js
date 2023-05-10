@@ -20,6 +20,7 @@ const Container = styled.div`
     transition: ${({ isResizing }) =>
         isResizing ? "none" : "width 0.2s ease"};
     flex-shrink: 0;
+    width: 100%;
 `;
 const Handle = styled.div`
     position: absolute;
