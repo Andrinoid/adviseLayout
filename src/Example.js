@@ -145,6 +145,32 @@ Flex.defaultProps = {
     padding: "0 20px",
 };
 
+const CloseBtn = styled.div`
+    border: none;
+    outline: 0px;   
+    user-select: none;
+    margin-left: auto;
+    padding: 0px;
+    font-family: inherit;
+    font-size: 11px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    border-radius: 2px;
+    color: rgb(171, 171, 171);
+    box-sizing: border-box;
+    box-shadow: none;
+    align-self: center;
+    width: 24px;
+    cursor: pointer;
+    background: transparent;
+    &:hover {
+        background: rgba(0, 0, 0, 0.04);
+    }
+    `;
+
 const SidabarControls = () => {
     return (
         <>
@@ -166,10 +192,12 @@ const SidabarControls = () => {
 };
 
 const CompanySettings = () => {
+    const controls = useControls();
     return (
         <SiderContext>
             <SiderTop>
                 <b>Company Name</b>
+                <CloseBtn onClick={() => controls.popSidebar(1)}><img src={process.env.PUBLIC_URL + "/cross.svg"} /></CloseBtn>
             </SiderTop>
             <SiderMain>
                 <ListItem>Company Profile</ListItem>
