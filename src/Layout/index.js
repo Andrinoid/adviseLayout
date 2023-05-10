@@ -256,7 +256,7 @@ const Sider = React.forwardRef(
                                     fadeIn={sidebar.data.length > 0}
                                 >
                                     <Drawer
-                                        index={index + sidebars.length -1}
+                                        index={index + 1}
                                         drawer={sidebar.drawer}
                                         initialWidth={actualWidth}
                                         minWidth={minWidth}
