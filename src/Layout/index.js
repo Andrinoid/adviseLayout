@@ -198,9 +198,7 @@ const Sider = React.forwardRef(
 
             if (scroll > lastScroll) {
                 next = nextDistance("desc");
-                console.log("next", next);
             } else {
-                console.log("next", next);
                 next = nextDistance("asc");
             }
 
