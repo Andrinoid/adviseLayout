@@ -31,10 +31,12 @@ const Drawer = (
 
     return (
         <Content
+            id="content"
             index={index}
             top={data.headerHeight}
             // left={left}
             width={initialWidth}
+            maxWidth={maxWidth}
             height={data.mainHeight}
         >
             <ResizableContainer
@@ -55,9 +57,8 @@ export default React.forwardRef(Drawer);
 
 const Content = styled.div`
     position: absolute;
-    // top: ${({ top }) => top}px;
     right: ${({ width, index }) => -(width * index)}px;
-    width: 100%;
+    width: ${({ width }) => width}px;
     height: 100%;
     box-sizing: border-box;
 `;
