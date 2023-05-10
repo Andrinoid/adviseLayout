@@ -104,6 +104,14 @@ const SiderContainer = styled.div`
     position: relative;
     display: flex;
     height: 100%;
+    overflow: scroll;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const SidebarLinksContainer = styled.div`
@@ -142,54 +150,122 @@ const SidebarLinks = ({ children }) => {
     return <SidebarLinksContainer>{children}</SidebarLinksContainer>;
 };
 
+const SwipeContainer = styled.div`
+    height: 100%;
+    display: flex;
+
+    @media (max-width: 450px) {
+        overflow: scroll;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        width: ${({ width }) => width}px;
+    }
+`;
+
+let lastScroll = 0;
 const Sider = React.forwardRef(
     ({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
+        const [actualWidth, setActualWidth] = useState(width);
         const controls = useControls();
 
-        return (
-            <SiderContainer>
-                {controls
-                    .getSidebars()
-                    .filter((s) => !s.drawer)
-                    .map((sidebar, index) => {
-                        return (
-                            <ResizableContainer
-                                key={index}
-                                initialWidth={width}
-                                minWidth={minWidth}
-                                maxWidth={maxWidth}
-                                ref={ref}
-                                className={className}
-                            >
-                                {sidebar.top() || children}
-                            </ResizableContainer>
-                        );
-                    })}
+        useEffect(() => {
+            if (window.innerWidth <= 450) {
+                setActualWidth(window.innerWidth - 60);
+            }
+        }, []);
 
-                {controls
-                    .getSidebars()
-                    .filter((s) => s.drawer)
-                    .map((sidebar, index) => {
-                        return (
-                            <Transition
-                                key={index}
-                                fadeIn={sidebar.data.length > 0}
-                            >
-                                <Drawer
-                                    index={index + 1}
-                                    drawer={sidebar.drawer}
-                                    initialWidth={width}
+        function handleSwipe() {
+            const elementYs = Array.from(
+                document.querySelectorAll(".swipe-element")
+            ).map((e) => e.offsetLeft);
+
+            const container = document.querySelector(".sider-container");
+
+            const scroll = container.scrollLeft;
+
+            let next;
+
+            if (scroll > lastScroll) {
+                next = nextDistance("desc");
+            } else {
+                next = nextDistance("asc");
+            }
+
+            container.scrollTo({
+                left: next,
+                behavior: "smooth",
+            });
+
+            lastScroll = scroll;
+
+            function nextDistance(order) {
+                if (order === "asc") {
+                    return elementYs
+                        .reverse()
+                        .find((element) => element < scroll);
+                }
+
+                return elementYs.find((element) => element > scroll);
+            }
+        }
+
+        return (
+            <SwipeContainer
+                className="swipe-container"
+                width={actualWidth}
+                onTouchEnd={handleSwipe}
+                // minWidth={minWidth}
+                // maxWidth={width}
+            >
+                <SiderContainer className="sider-container">
+                    {controls
+                        .getSidebars()
+                        .filter((s) => !s.drawer)
+                        .map((sidebar, index) => {
+                            return (
+                                <ResizableContainer
+                                    key={index}
+                                    initialWidth={actualWidth}
                                     minWidth={minWidth}
                                     maxWidth={maxWidth}
                                     ref={ref}
-                                    className={className}
+                                    className={className + " swipe-element"}
                                 >
                                     {sidebar.top() || children}
-                                </Drawer>
-                            </Transition>
-                        );
-                    })}
-            </SiderContainer>
+                                </ResizableContainer>
+                            );
+                        })}
+
+                    {controls
+                        .getSidebars()
+                        .filter((s) => s.drawer)
+                        .map((sidebar, index) => {
+                            return (
+                                <Transition
+                                    key={index}
+                                    fadeIn={sidebar.data.length > 0}
+                                >
+                                    <Drawer
+                                        index={index + 1}
+                                        drawer={sidebar.drawer}
+                                        initialWidth={actualWidth}
+                                        minWidth={minWidth}
+                                        maxWidth={maxWidth}
+                                        ref={ref}
+                                        className={className + " swipe-element"}
+                                    >
+                                        {sidebar.top() || children}
+                                    </Drawer>
+                                </Transition>
+                            );
+                        })}
+                </SiderContainer>
+            </SwipeContainer>
         );
     }
 );
@@ -227,7 +303,6 @@ const Layout = ({ children }) => {
     const paddingLeft = 60 + siders.length * sidebarWidth;
 
     const header = controls.getHeader();
-
 
     //only render the LayoutContextProveder on the parent Layout
     return isParent ? (

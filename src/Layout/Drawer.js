@@ -57,7 +57,7 @@ const Content = styled.div`
     position: absolute;
     // top: ${({ top }) => top}px;
     right: ${({ width, index }) => -(width * index)}px;
-    width: auto;
+    width: 100%;
     height: 100%;
     box-sizing: border-box;
 `;
