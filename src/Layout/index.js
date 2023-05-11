@@ -125,11 +125,13 @@ const SidebarLinksContainer = styled.div`
     height: 100%;
     width: 60px;
     background-color: #242a43;
-    border-right: 1px solid rgb(232, 232, 232);
+    border-right: ${({ right }) => (right ? "none" : "1px solid #e8eaed")};
+    border-left: ${({ right }) => (right ? "1px solid #e8eaed" : "none")};
     background: #f8fafb;
     flex-shrink: 0;
     position: fixed;
-    left: 0;
+    left: ${({ right }) => (right ? "initial" : 0)};
+    right: ${({ right }) => (right ? 0 : "initial")};
     z-index: 1;
 `;
 
@@ -140,19 +142,31 @@ const SideBarPanelContainer = styled.div`
     bottom: 0;
     height: 100%;
     z-index: 1;
-    padding-left: 60px;
+    padding-left: ${({ right }) => (right ? 0 : sidebarLinksWidth)}px;
+    padding-right: ${({ right }) => (right ? sidebarLinksWidth : 0)}px;
+    left: ${({ right }) => (right ? "initial" : 0)};
+    right: ${({ right }) => (right ? 0 : "initial")};
 `;
 
-const SideBarPanel = ({ children }) => {
-    return <SideBarPanelContainer>{children}</SideBarPanelContainer>;
+const SideBarPanel = ({ children, right }) => {
+    if (right) {
+        children = React.Children.map(children, (child) => {
+            return React.cloneElement(child, { right: true });
+        });
+    }
+    return (
+        <SideBarPanelContainer right={right}>{children}</SideBarPanelContainer>
+    );
 };
 
 const Footer = ({ children }) => {
     return <FooterContainer>{children}</FooterContainer>;
 };
 
-const SidebarLinks = ({ children }) => {
-    return <SidebarLinksContainer>{children}</SidebarLinksContainer>;
+const SidebarLinks = ({ children, right }) => {
+    return (
+        <SidebarLinksContainer right={right}>{children}</SidebarLinksContainer>
+    );
 };
 
 const SwipeContainer = styled.div`
@@ -273,7 +287,7 @@ const Sider = React.forwardRef(
     }
 );
 
-const Layout = ({ children }) => {
+const Layout = ({ children, right }) => {
     const controls = useControls();
 
     const siders = controls.getSidebars().filter((s) => !s.drawer);
@@ -302,6 +316,16 @@ const Layout = ({ children }) => {
         }
     });
 
+    children = React.Children.map(children, (child) => {
+        if (
+            child.type.name !== "Layout" &&
+            child.type.name !== "SideBarPanel"
+        ) {
+            return child;
+        }
+        return React.cloneElement(child, { right: right });
+    });
+
     const sidebarWidth = 260;
     const paddingLeft = 60 + siders.length * sidebarWidth;
 
@@ -315,7 +339,18 @@ const Layout = ({ children }) => {
     ) : (
         <LayoutContainer
             paddingLeft={
-                header.shouldCollapse
+                right
+                    ? 0
+                    : header.shouldCollapse
+                    ? header.isCollapsed
+                        ? 60
+                        : paddingLeft
+                    : paddingLeft
+            }
+            paddingRight={
+                !right
+                    ? 0
+                    : header.shouldCollapse
                     ? header.isCollapsed
                         ? 60
                         : paddingLeft

@@ -15,7 +15,8 @@ const LogoBox = styled.div`
 
 const StyledSider = styled(Sider)`
     background-color: lightblue;
-    border-right: 1px solid rgb(232, 232, 232);
+    border-right: ${({ right }) => !right && "1px solid rgb(232, 232, 232)"};
+    border-left: ${({ right }) => right && "1px solid rgb(232, 232, 232)"};
     background: #f8fafb;
 `;
 
@@ -243,7 +244,7 @@ const Example = () => {
     };
 
     return (
-        <Layout>
+        <Layout right>
 
             <SideBarPanel>
 
