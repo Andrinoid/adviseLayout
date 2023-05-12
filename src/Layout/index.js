@@ -46,8 +46,9 @@ const LayoutContainer = styled.section`
     height: 100vh;
     flex: 1;
     box-sizing: border-box;
-    padding-left: ${({ paddingLeft }) => paddingLeft}px;
-    transition: padding-left 0.2s ease;
+    padding-left: ${({ padding, right }) => (!right ? padding : "initial")}px;
+    padding-right: ${({ padding, right }) => (right ? padding : "initial")}px;
+    transition: padding-left 0.2s ease, padding-right 0.2s ease;
     ${({ isParent }) => {
         if (isParent) {
             return `
@@ -84,7 +85,7 @@ const Content = styled.main`
     display: block;
     flex: 1 1 auto;
     user-select: none;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     // padding-bottom: ${footerHeight}px;
     padding-left: ${({ paddingLeft }) => paddingLeft}px;
 `;
@@ -189,7 +190,10 @@ const SwipeContainer = styled.div`
 
 let lastScroll = 0;
 const Sider = React.forwardRef(
-    ({ width, className, maxWidth = 600, minWidth = 200, right, children }, ref) => {
+    (
+        { width, className, maxWidth = 600, minWidth = 200, right, children },
+        ref
+    ) => {
         const [actualWidth, setActualWidth] = useState(width);
         const controls = useControls();
 
@@ -332,6 +336,14 @@ const Layout = ({ children, right }) => {
 
     const header = controls.getHeader();
 
+    const padding = header.shouldCollapse
+        ? header.isCollapsed
+            ? 60
+            : paddingLeft
+        : 0;
+
+    console.log(padding)
+
     //only render the LayoutContextProveder on the parent Layout
     return isParent ? (
         <LayoutContextProvider>
@@ -339,24 +351,8 @@ const Layout = ({ children, right }) => {
         </LayoutContextProvider>
     ) : (
         <LayoutContainer
-            paddingLeft={
-                right
-                    ? 0
-                    : header.shouldCollapse
-                    ? header.isCollapsed
-                        ? 60
-                        : paddingLeft
-                    : paddingLeft
-            }
-            paddingRight={
-                !right
-                    ? 0
-                    : header.shouldCollapse
-                    ? header.isCollapsed
-                        ? 60
-                        : paddingLeft
-                    : paddingLeft
-            }
+            padding={padding}
+            right={right}
             hasFooter={hasFooter}
             hasHeader={hasHeader}
             hasSidebarLinks={hasSidebarLinks}
