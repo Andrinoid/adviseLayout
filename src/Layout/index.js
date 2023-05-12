@@ -189,7 +189,7 @@ const SwipeContainer = styled.div`
 
 let lastScroll = 0;
 const Sider = React.forwardRef(
-    ({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
+    ({ width, className, maxWidth = 600, minWidth = 200, right, children }, ref) => {
         const [actualWidth, setActualWidth] = useState(width);
         const controls = useControls();
 
@@ -274,6 +274,7 @@ const Sider = React.forwardRef(
                                         minWidth={minWidth}
                                         maxWidth={maxWidth}
                                         ref={ref}
+                                        right={right}
                                         className={className + " swipe-element"}
                                     >
                                         {sidebar.top() || children}

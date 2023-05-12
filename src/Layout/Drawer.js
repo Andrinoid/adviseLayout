@@ -11,6 +11,7 @@ const Drawer = (
         maxWidth = Infinity,
         className,
         index,
+        right
     },
     ref
 ) => {
@@ -34,7 +35,7 @@ const Drawer = (
             id="content"
             index={index}
             top={data.headerHeight}
-            // left={left}
+            right={right}
             width={initialWidth}
             maxWidth={maxWidth}
             height={data.mainHeight}
@@ -57,7 +58,8 @@ export default React.forwardRef(Drawer);
 
 const Content = styled.div`
     position: absolute;
-    right: ${({ width, index }) => -(width * index)}px;
+    right: ${({ width, index,right }) => !right ? -(width * index) : 'initial'}px;
+    left: ${({ right, index, width }) => right ? -(width * index) : 'initial'}px;
     width: ${({ width }) => width}px;
     height: 100%;
     box-sizing: border-box;
