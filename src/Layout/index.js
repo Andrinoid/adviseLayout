@@ -188,6 +188,35 @@ const SwipeContainer = styled.div`
     }
 `;
 
+const CloseBtn = styled.div`
+    border: none;
+    outline: 0px;
+    user-select: none;
+    margin-left: auto;
+    padding: 0px;
+    font-family: inherit;
+    font-size: 11px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    border-radius: 2px;
+    color: rgb(171, 171, 171);
+    box-sizing: border-box;
+    box-shadow: none;
+    align-self: center;
+    width: 24px;
+    cursor: pointer;
+    background: transparent;
+    &:hover {
+        background: rgba(0, 0, 0, 0.04);
+    }
+    z-index: 1;
+`;
+
 let lastScroll = 0;
 const Sider = React.forwardRef(
     (
@@ -240,6 +269,21 @@ const Sider = React.forwardRef(
 
         const sidebars = controls.getSidebars().filter((s) => !s.drawer);
 
+        function popSidebar(value) {
+            const all = controls.getSidebars();
+            const i = all.findIndex((s) => s === value);
+
+            if (controls.getSidebar(i + 1).length() > 0) {
+                controls.popSidebar(i + 1);
+            } else {
+                const amount = right ? i : all.length - i - 1;
+
+                for (let y = 0; y <= amount; y++) {
+                    controls.popStack();
+                }
+            }
+        }
+
         return (
             <SwipeContainer
                 className="swipe-container"
@@ -249,16 +293,26 @@ const Sider = React.forwardRef(
                 <SiderContainer className="sider-container">
                     {sidebars.map((sidebar, index) => {
                         return (
-                            <ResizableContainer
-                                key={index}
-                                initialWidth={actualWidth}
-                                minWidth={minWidth}
-                                maxWidth={maxWidth}
-                                ref={ref}
-                                className={className + " swipe-element"}
-                            >
-                                {sidebar.top() || children}
-                            </ResizableContainer>
+                            <div style={{ position: "relative" }}>
+                                <CloseBtn onClick={() => popSidebar(sidebar)}>
+                                    <img
+                                        src={
+                                            process.env.PUBLIC_URL +
+                                            "/cross.svg"
+                                        }
+                                    />
+                                </CloseBtn>
+                                <ResizableContainer
+                                    key={index}
+                                    initialWidth={actualWidth}
+                                    minWidth={minWidth}
+                                    maxWidth={maxWidth}
+                                    ref={ref}
+                                    className={className + " swipe-element"}
+                                >
+                                    {sidebar.top() || children}
+                                </ResizableContainer>
+                            </div>
                         );
                     })}
 
@@ -342,7 +396,7 @@ const Layout = ({ children, right }) => {
             : paddingLeft
         : 0;
 
-    console.log(padding)
+    console.log(padding);
 
     //only render the LayoutContextProveder on the parent Layout
     return isParent ? (

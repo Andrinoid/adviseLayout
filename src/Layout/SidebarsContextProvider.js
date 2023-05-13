@@ -132,7 +132,10 @@ export function useControls() {
         if (data.header.shouldCollapse && data.header.isCollapsed) return;
 
         data.sidebars.pop();
-        setData({ ...data, sidebars: Object.assign([], data.sidebars) });
+        setData({
+            ...data,
+            sidebars: data.sidebars.map((s) => Object.assign(new Stack(), s)),
+        });
     }
 
     const popStacks = (type = null) => {

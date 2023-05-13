@@ -198,7 +198,7 @@ const CompanySettings = () => {
         <SiderContext>
             <SiderTop>
                 <b>Company Name</b>
-                <CloseBtn onClick={() => controls.popSidebar(1)}><img src={process.env.PUBLIC_URL + "/cross.svg"} /></CloseBtn>
+                {/* <CloseBtn onClick={() => controls.popSidebar(1)}><img src={process.env.PUBLIC_URL + "/cross.svg"} /></CloseBtn> */}
             </SiderTop>
             <SiderMain>
                 <ListItem>Company Profile</ListItem>
