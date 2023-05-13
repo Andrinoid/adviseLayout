@@ -244,7 +244,7 @@ const Example = () => {
     };
 
     return (
-        <Layout>
+        <Layout right>
 
             <SideBarPanel>
 

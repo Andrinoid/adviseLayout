@@ -39,6 +39,7 @@ export function SidebarsProvider({ children }) {
     const [data, setData] = useState({
         sidebars: [],
         header: { shouldCollapse: true, isCollapsed: false },
+        atRight: false,
     });
 
     return (
@@ -64,6 +65,10 @@ export function useControls() {
         }
 
         return null;
+    };
+
+    const getIsAtRight = () => {
+        return data.atRight;
     };
 
     const getSidebars = () => {
@@ -98,7 +103,11 @@ export function useControls() {
     function addSidebar(content, config) {
         if (data.header.shouldCollapse && data.header.isCollapsed) return;
 
-        data.sidebars.push(new Stack(content, config));
+        if (data.atRight) {
+            data.sidebars.unshift(new Stack(content, config));
+        } else {
+            data.sidebars.push(new Stack(content, config));
+        }
 
         if (data.header.shouldCollapse) {
             const isCollapsed =
@@ -131,7 +140,11 @@ export function useControls() {
     function popStack() {
         if (data.header.shouldCollapse && data.header.isCollapsed) return;
 
-        data.sidebars.pop();
+        if (data.atRight) {
+            data.sidebars.shift();
+        } else {
+            data.sidebars.pop();
+        }
         setData({
             ...data,
             sidebars: data.sidebars.map((s) => Object.assign(new Stack(), s)),
@@ -170,5 +183,6 @@ export function useControls() {
         getHeader,
         setShouldCollapse,
         toggleCollapsed,
+        getIsAtRight,
     };
 }

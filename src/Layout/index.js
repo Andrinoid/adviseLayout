@@ -149,14 +149,16 @@ const SideBarPanelContainer = styled.div`
     right: ${({ right }) => (right ? 0 : "initial")};
 `;
 
-const SideBarPanel = ({ children, right }) => {
-    if (right) {
+const SideBarPanel = ({ children }) => {
+    const { getIsAtRight } = useControls();
+
+    if (getIsAtRight()) {
         children = React.Children.map(children, (child) => {
             return React.cloneElement(child, { right: true });
         });
     }
     return (
-        <SideBarPanelContainer right={right}>{children}</SideBarPanelContainer>
+        <SideBarPanelContainer right={getIsAtRight()}>{children}</SideBarPanelContainer>
     );
 };
 
@@ -164,9 +166,10 @@ const Footer = ({ children }) => {
     return <FooterContainer>{children}</FooterContainer>;
 };
 
-const SidebarLinks = ({ children, right }) => {
+const SidebarLinks = ({ children }) => {
+    const { getIsAtRight } = useControls();
     return (
-        <SidebarLinksContainer right={right}>{children}</SidebarLinksContainer>
+        <SidebarLinksContainer right={getIsAtRight()}>{children}</SidebarLinksContainer>
     );
 };
 
@@ -273,12 +276,14 @@ const Sider = React.forwardRef(
             const all = controls.getSidebars();
             const i = all.findIndex((s) => s === value);
 
-            if (controls.getSidebar(i + 1).length() > 0) {
+            const length = controls.getSidebar(i + 1).length()
+
+            if (length > 0) {
                 controls.popSidebar(i + 1);
             } else {
-                const amount = right ? i : all.length - i - 1;
+                const amount = controls.getIsAtRight() ? i + 1 : all.length - i;
 
-                for (let y = 0; y <= amount; y++) {
+                for (let y = 0; y < Math.abs(amount); y++) {
                     controls.popStack();
                 }
             }
@@ -325,6 +330,7 @@ const Sider = React.forwardRef(
                                     key={index}
                                     fadeIn={sidebar.data.length > 0}
                                 >
+                                    
                                     <Drawer
                                         index={index + 1}
                                         drawer={sidebar.drawer}
@@ -332,8 +338,18 @@ const Sider = React.forwardRef(
                                         minWidth={minWidth}
                                         maxWidth={maxWidth}
                                         ref={ref}
-                                        right={right}
+                                        right={controls.getIsAtRight()}
                                         className={className + " swipe-element"}
+                                        closeButton={<CloseBtn
+                                            onClick={() => popSidebar(sidebar)}
+                                        >
+                                            <img
+                                                src={
+                                                    process.env.PUBLIC_URL +
+                                                    "/cross.svg"
+                                                }
+                                            />
+                                        </CloseBtn>}
                                     >
                                         {sidebar.top() || children}
                                     </Drawer>
@@ -396,7 +412,6 @@ const Layout = ({ children, right }) => {
             : paddingLeft
         : 0;
 
-    console.log(padding);
 
     //only render the LayoutContextProveder on the parent Layout
     return isParent ? (
@@ -406,7 +421,7 @@ const Layout = ({ children, right }) => {
     ) : (
         <LayoutContainer
             padding={padding}
-            right={right}
+            right={controls.getIsAtRight()}
             hasFooter={hasFooter}
             hasHeader={hasHeader}
             hasSidebarLinks={hasSidebarLinks}

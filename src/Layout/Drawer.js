@@ -2,6 +2,7 @@ import React, { useState, useEffect} from "react";
 import styled from "styled-components";
 
 import { ResizableContainer } from "./ResizableContainer";
+import { useControls } from "./SidebarsContextProvider";
 
 const Drawer = (
     {
@@ -11,10 +12,11 @@ const Drawer = (
         maxWidth = Infinity,
         className,
         index,
-        right
+        closeButton,
     },
     ref
 ) => {
+    const { getIsAtRight } = useControls();
     const [data, setData] = useState({
         mainHeight: 0,
         headerHeight: 0,
@@ -35,11 +37,12 @@ const Drawer = (
             id="content"
             index={index}
             top={data.headerHeight}
-            right={right}
+            right={getIsAtRight()}
             width={initialWidth}
             maxWidth={maxWidth}
             height={data.mainHeight}
         >
+            {closeButton}
             <ResizableContainer
                 drawer={true}
                 initialWidth={initialWidth}
