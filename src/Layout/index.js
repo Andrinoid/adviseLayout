@@ -272,22 +272,6 @@ const Sider = React.forwardRef(
 
         const sidebars = controls.getSidebars().filter((s) => !s.drawer);
 
-        function popSidebar(value) {
-            const all = controls.getSidebars();
-            const i = all.findIndex((s) => s === value);
-
-            const length = controls.getSidebar(i + 1).length()
-
-            if (length > 0) {
-                controls.popSidebar(i + 1);
-            } else {
-                const amount = controls.getIsAtRight() ? i + 1 : all.length - i;
-
-                for (let y = 0; y < Math.abs(amount); y++) {
-                    controls.popStack();
-                }
-            }
-        }
 
         return (
             <SwipeContainer
@@ -299,7 +283,7 @@ const Sider = React.forwardRef(
                     {sidebars.map((sidebar, index) => {
                         return (
                             <div style={{ position: "relative" }}>
-                                <CloseBtn onClick={() => popSidebar(sidebar)}>
+                                <CloseBtn onClick={() => controls.popStackFrom(sidebar)}>
                                     <img
                                         src={
                                             process.env.PUBLIC_URL +
@@ -341,7 +325,7 @@ const Sider = React.forwardRef(
                                         right={controls.getIsAtRight()}
                                         className={className + " swipe-element"}
                                         closeButton={<CloseBtn
-                                            onClick={() => popSidebar(sidebar)}
+                                            onClick={() => controls.popStackFrom(sidebar)}
                                         >
                                             <img
                                                 src={

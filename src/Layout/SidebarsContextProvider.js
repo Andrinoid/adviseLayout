@@ -49,7 +49,7 @@ export function SidebarsProvider({ children }) {
     );
 }
 
-export function useControls() {
+export function useControls(config = {}) {
     const context = useContext(SidebarsContext);
     if (context === undefined) {
         throw new Error(
@@ -59,12 +59,20 @@ export function useControls() {
 
     const { data, setData } = context;
 
+    if (config.atRight && data.atRight !== config.atRight) {
+        setData({ ...data, atRight: config.atRight });
+    }
+
     const getSidebar = function (number = 1) {
         if (number > 0 && number <= data.sidebars.length) {
             return data.sidebars[number - 1];
         }
 
         return null;
+    };
+
+    const setAtRight = (value) => {
+        setData({ ...data, atRight: value });
     };
 
     const getIsAtRight = () => {
@@ -171,6 +179,23 @@ export function useControls() {
         }
     };
 
+    function popStackFrom(sidebar) {
+        const all = getSidebars();
+        const i = all.findIndex((s) => s === sidebar);
+
+        const length = getSidebar(i + 1).length()
+
+        if (length > 0) {
+            popSidebar(i + 1);
+        } else {
+            const amount = getIsAtRight() ? i + 1 : all.length - i;
+
+            for (let y = 0; y < amount; y++) {
+                popStack();
+            }
+        }
+    }
+
     return {
         getSidebar,
         getSidebars,
@@ -184,5 +209,7 @@ export function useControls() {
         setShouldCollapse,
         toggleCollapsed,
         getIsAtRight,
+        popStackFrom,
+        setAtRight,
     };
 }

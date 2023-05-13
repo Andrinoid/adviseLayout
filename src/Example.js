@@ -1,5 +1,13 @@
-import React, { useRef, useContext, useState } from "react";
-import { Layout, Sider, Header, Content, Footer, SidebarLinks, SideBarPanel } from "./Layout";
+import React, { useRef, useContext, useState, useEffect } from "react";
+import {
+    Layout,
+    Sider,
+    Header,
+    Content,
+    Footer,
+    SidebarLinks,
+    SideBarPanel,
+} from "./Layout";
 import styled from "styled-components";
 import { useControls } from "./Layout/SidebarsContextProvider";
 
@@ -148,7 +156,7 @@ Flex.defaultProps = {
 
 const CloseBtn = styled.div`
     border: none;
-    outline: 0px;   
+    outline: 0px;
     user-select: none;
     margin-left: auto;
     padding: 0px;
@@ -170,7 +178,7 @@ const CloseBtn = styled.div`
     &:hover {
         background: rgba(0, 0, 0, 0.04);
     }
-    `;
+`;
 
 const SidabarControls = () => {
     return (
@@ -185,7 +193,7 @@ const SidabarControls = () => {
                     min="1"
                     max="100"
                     value="50"
-                    onChange={() => { }}
+                    onChange={() => {}}
                 ></input>
             </MainArea>
         </>
@@ -230,7 +238,7 @@ const DatasourcesSettings = () => {
 const Example = () => {
     const siderRef = useRef(null);
     const [sidebarNumber, setSidebarNumber] = useState(1);
-    const controls = useControls();
+    const controls = useControls({ atRight: true });
 
     const changeSidebar = (number) => {
         if (number) {
@@ -244,17 +252,19 @@ const Example = () => {
     };
 
     return (
-        <Layout right>
-
+        <Layout>
             <SideBarPanel>
-
                 <SidebarLinks>
                     {/* app code */}
                     <SiderTop padding={12}>
                         <img
                             src={process.env.PUBLIC_URL + "/advise.png"}
                             alt="Logo"
-                            style={{ width: "100%", height: "auto", maxWidth: 60 }}
+                            style={{
+                                width: "100%",
+                                height: "auto",
+                                maxWidth: 60,
+                            }}
                         />
                     </SiderTop>
                     <ListItem
@@ -287,7 +297,9 @@ const Example = () => {
                             <b>Company Name</b>
                         </SiderTop>
                         <SiderMain>
-                            <ListItem>Default children case content null</ListItem>
+                            <ListItem>
+                                Default children case content null
+                            </ListItem>
                         </SiderMain>
                         <SiderFooter>footer</SiderFooter>
                     </SiderContext>
