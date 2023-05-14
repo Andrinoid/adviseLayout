@@ -158,7 +158,9 @@ const SideBarPanel = ({ children }) => {
         });
     }
     return (
-        <SideBarPanelContainer right={getIsAtRight()}>{children}</SideBarPanelContainer>
+        <SideBarPanelContainer right={getIsAtRight()}>
+            {children}
+        </SideBarPanelContainer>
     );
 };
 
@@ -169,7 +171,9 @@ const Footer = ({ children }) => {
 const SidebarLinks = ({ children }) => {
     const { getIsAtRight } = useControls();
     return (
-        <SidebarLinksContainer right={getIsAtRight()}>{children}</SidebarLinksContainer>
+        <SidebarLinksContainer right={getIsAtRight()}>
+            {children}
+        </SidebarLinksContainer>
     );
 };
 
@@ -238,9 +242,11 @@ const Sider = React.forwardRef(
         function handleSwipe() {
             const elementYs = Array.from(
                 document.querySelectorAll(".swipe-element")
-            ).map((e) => e.offsetLeft);
+            ).map((e) => {
+                return e.offsetLeft;
+            });
 
-            const container = document.querySelector(".sider-container");
+            const container = document.querySelector(".swipe-container");
 
             const scroll = container.scrollLeft;
 
@@ -257,7 +263,7 @@ const Sider = React.forwardRef(
                 behavior: "smooth",
             });
 
-            lastScroll = scroll;
+            lastScroll = next;
 
             function nextDistance(order) {
                 if (order === "asc") {
@@ -272,18 +278,24 @@ const Sider = React.forwardRef(
 
         const sidebars = controls.getSidebars().filter((s) => !s.drawer);
 
-
         return (
-            <SwipeContainer
-                className="swipe-container"
-                width={actualWidth}
-                onTouchEnd={handleSwipe}
-            >
-                <SiderContainer className="sider-container">
+            <SiderContainer className="sider-container">
+                <SwipeContainer
+                    className="swipe-container"
+                    width={actualWidth}
+                    onTouchEnd={handleSwipe}
+                >
                     {sidebars.map((sidebar, index) => {
                         return (
-                            <div style={{ position: "relative" }}>
-                                <CloseBtn onClick={() => controls.popStackFrom(sidebar)}>
+                            <div
+                                style={{ position: "relative" }}
+                                className="swipe-element"
+                            >
+                                <CloseBtn
+                                    onClick={() =>
+                                        controls.popStackFrom(sidebar)
+                                    }
+                                >
                                     <img
                                         src={
                                             process.env.PUBLIC_URL +
@@ -297,7 +309,7 @@ const Sider = React.forwardRef(
                                     minWidth={minWidth}
                                     maxWidth={maxWidth}
                                     ref={ref}
-                                    className={className + " swipe-element"}
+                                    className={className}
                                 >
                                     {sidebar.top() || children}
                                 </ResizableContainer>
@@ -314,7 +326,6 @@ const Sider = React.forwardRef(
                                     key={index}
                                     fadeIn={sidebar.data.length > 0}
                                 >
-                                    
                                     <Drawer
                                         index={index + 1}
                                         drawer={sidebar.drawer}
@@ -324,24 +335,30 @@ const Sider = React.forwardRef(
                                         ref={ref}
                                         right={controls.getIsAtRight()}
                                         className={className + " swipe-element"}
-                                        closeButton={<CloseBtn
-                                            onClick={() => controls.popStackFrom(sidebar)}
-                                        >
-                                            <img
-                                                src={
-                                                    process.env.PUBLIC_URL +
-                                                    "/cross.svg"
+                                        closeButton={
+                                            <CloseBtn
+                                                onClick={() =>
+                                                    controls.popStackFrom(
+                                                        sidebar
+                                                    )
                                                 }
-                                            />
-                                        </CloseBtn>}
+                                            >
+                                                <img
+                                                    src={
+                                                        process.env.PUBLIC_URL +
+                                                        "/cross.svg"
+                                                    }
+                                                />
+                                            </CloseBtn>
+                                        }
                                     >
                                         {sidebar.top() || children}
                                     </Drawer>
                                 </Transition>
                             );
                         })}
-                </SiderContainer>
-            </SwipeContainer>
+                </SwipeContainer>
+            </SiderContainer>
         );
     }
 );
@@ -395,7 +412,6 @@ const Layout = ({ children, right }) => {
             ? 60
             : paddingLeft
         : 0;
-
 
     //only render the LayoutContextProveder on the parent Layout
     return isParent ? (
