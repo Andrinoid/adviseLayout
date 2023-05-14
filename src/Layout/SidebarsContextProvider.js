@@ -37,7 +37,7 @@ export class Stack {
 // Provider component
 export function SidebarsProvider({ children }) {
     const [data, setData] = useState({
-        sidebars: [],
+        sidebars: [new Stack(), new Stack(), new Stack()],
         header: { shouldCollapse: true, isCollapsed: false },
         atRight: false,
     });

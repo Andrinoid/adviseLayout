@@ -107,17 +107,25 @@ const SiderContainer = styled.div`
     height: 100%;
     background-color: aliceblue;
 
-    @media (max-width: 450px) {
-        overflow: scroll;
-        overflow-x: scroll;
-        scroll-snap-type: x mandatory;
+    ${({ width }) => {
+        const isTouchDevice =
+            "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
 
-        &::-webkit-scrollbar {
-            display: none;
+        if (isTouchDevice) {
+            return `
+                overflow: scroll;
+                overflow-x: scroll;
+                scroll-snap-type: x mandatory;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                width: ${width}px;
+            `;
         }
-
-        width: ${({ width }) => width}px;
-    }
+        return "";
+    }}
 `;
 
 const SidebarLinksContainer = styled.div`
@@ -182,17 +190,31 @@ const SwipeContainer = styled.div`
     display: flex;
     /* position: relative; */
 
-    @media (max-width: 450px) {
-        overflow: scroll;
-        overflow-x: scroll;
-        scroll-snap-type: x mandatory;
+    ${({ width, sidebarsAmount }) => {
+        const isTouchDevice =
+            "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
 
-        &::-webkit-scrollbar {
-            display: none;
+        if (isTouchDevice) {
+            let result = `
+                overflow: scroll;
+                overflow-x: scroll;
+                scroll-snap-type: x mandatory;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            `;
+
+            if (sidebarsAmount > 0) {
+                result += `
+                    width: ${width}px;
+                `;
+            }
+
+            return result;
         }
-
-        width: ${({ width }) => width}px;
-    }
+        return "";
+    }}
 `;
 
 const CloseBtn = styled.div`
@@ -234,7 +256,10 @@ const Sider = React.forwardRef(
         const controls = useControls();
 
         useEffect(() => {
-            if (window.innerWidth <= 450) {
+            const isTouchDevice =
+                "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
+            console.log(isTouchDevice);
+            if (isTouchDevice) {
                 setActualWidth(window.innerWidth - 60);
             }
         }, []);
@@ -284,6 +309,7 @@ const Sider = React.forwardRef(
                     className="swipe-container"
                     width={actualWidth}
                     onTouchEnd={handleSwipe}
+                    sidebarsAmount={controls.getSidebars().length}
                 >
                     {sidebars.map((sidebar, index) => {
                         return (
