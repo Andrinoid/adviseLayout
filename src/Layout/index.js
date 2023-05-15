@@ -234,7 +234,8 @@ const Sider = React.forwardRef(
             }
         }, []);
 
-        function handleSwipe() {
+        function handleSwipe(e) {
+            e.preventDefault();
             const elementYs = Array.from(
                 document.querySelectorAll(".swipe-element")
             ).map((e) => {

@@ -121,7 +121,6 @@ export function useControls(config = {}) {
             //     setData({ ...data, sidebars: cloneDeep(data.sidebars) });
             // }, 100);
 
-
             data.sidebars[number - 1].push(
                 <Transition fadeIn={true}>{content}</Transition>
             );
@@ -212,11 +211,11 @@ export function useControls(config = {}) {
             popSidebar(i + 1);
 
             const amount = getIsAtRight() ? i + 1 : all.length - i;
-
-            for (let y = 1; y < amount; y++) {
+            const from = length == 1 && i != 0 ? 0 : 1;
+            for (let y = from; y < amount; y++) {
                 popStack();
             }
-        } 
+        }
     }
 
     return {
