@@ -238,7 +238,7 @@ const DatasourcesSettings = () => {
 const Example = () => {
     const siderRef = useRef(null);
     const [sidebarNumber, setSidebarNumber] = useState(1);
-    const controls = useControls({ atRight: true });
+    const controls = useControls();
 
     const changeSidebar = (number) => {
         if (number) {

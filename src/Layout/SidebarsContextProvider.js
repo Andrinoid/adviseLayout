@@ -37,7 +37,7 @@ export class Stack {
 // Provider component
 export function SidebarsProvider({ children }) {
     const [data, setData] = useState({
-        sidebars: [new Stack(), new Stack(), new Stack()],
+        sidebars: [],
         header: { shouldCollapse: true, isCollapsed: false },
         atRight: false,
     });
@@ -59,8 +59,8 @@ export function useControls(config = {}) {
 
     const { data, setData } = context;
 
-    if (config.atRight && data.atRight !== config.atRight) {
-        setData({ ...data, atRight: config.atRight });
+    if (config.position && config.position == 'right') {
+        setData({ ...data, atRight: true });
     }
 
     const getSidebar = function (number = 1) {
