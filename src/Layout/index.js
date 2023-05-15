@@ -5,37 +5,7 @@ import Header from "./Header";
 import LayoutContextProvider from "./LayoutContextProvider";
 import { useControls } from "./SidebarsContextProvider";
 import Drawer from "./Drawer";
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-
-const fadeOut = keyframes`
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-`;
-
-const Transition = styled.div`
-    animation: ${(props) =>
-        props.fadeIn
-            ? css`
-                  ${fadeIn} 0.25s ease-in forwards
-              `
-            : props.fadeOut
-            ? css`
-                  ${fadeOut} 0.25s ease-out forwards
-              `
-            : "none"};
-`;
+import Transition from "./Transition";
 
 const footerHeight = 38;
 const sidebarLinksWidth = 60;
@@ -249,7 +219,7 @@ const CloseBtn = styled.div`
 let lastScroll = 0;
 const Sider = React.forwardRef(
     (
-        { width, className, maxWidth = 600, minWidth = 200, right, children },
+        { width, className, maxWidth = 600, minWidth = 200, children },
         ref
     ) => {
         const [actualWidth, setActualWidth] = useState(width);

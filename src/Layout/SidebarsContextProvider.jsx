@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
-
+import Transition from "./Transition";
 // Create Sidebar Content Context
 export const SidebarsContext = createContext();
 
@@ -59,7 +59,7 @@ export function useControls(config = {}) {
 
     const { data, setData } = context;
 
-    if (config.position && config.position == 'right') {
+    if (config.position && config.position == "right") {
         setData({ ...data, atRight: true });
     }
 
@@ -100,11 +100,18 @@ export function useControls(config = {}) {
         setData(result);
     }
 
-    function addToSidebar(content, number = 1) {
-        if (data.sidebars[number - 1]) {
-            data.sidebars[number - 1].push(content);
+    // {children && <Transition fadeIn={true}>{children}</Transition>}
 
-            setData({ ...data, sidebars: Object.assign([], data.sidebars) });
+    function addToSidebar(content, number = 1) {
+        const sidebars = [...data.sidebars];
+        if (sidebars[number - 1]) {
+            setData({ ...data, sidebars: []});
+
+            sidebars[number - 1].push(
+                <Transition fadeIn={true}>{content}</Transition>
+            );
+
+            setData({ ...data, sidebars: Object.assign([], sidebars) });
         }
     }
 
@@ -183,7 +190,7 @@ export function useControls(config = {}) {
         const all = getSidebars();
         const i = all.findIndex((s) => s === sidebar);
 
-        const length = getSidebar(i + 1).length()
+        const length = getSidebar(i + 1).length();
 
         if (length > 0) {
             popSidebar(i + 1);

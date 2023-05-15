@@ -166,9 +166,7 @@ export const ResizableContainer = React.forwardRef(function (
         };
     }, [isResizing]);
 
-    const controls = useControls();
 
-    const header = controls.getHeader();
     return (
         <Container
             className={className}
