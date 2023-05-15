@@ -8,6 +8,8 @@ import React, {
 import styled from "styled-components";
 import { Context } from "./LayoutContextProvider";
 import { useControls } from "./SidebarsContextProvider";
+import { cloneDeep } from "lodash";
+import Transition from "./Transition";
 
 const Container = styled.div`
     position: relative;
@@ -165,7 +167,6 @@ export const ResizableContainer = React.forwardRef(function (
             document.removeEventListener("mouseup", mouseUpHandler);
         };
     }, [isResizing]);
-
 
     return (
         <Container

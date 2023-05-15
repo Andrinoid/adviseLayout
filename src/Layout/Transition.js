@@ -25,11 +25,9 @@ const Component = styled.div`
             ? css`
                   ${fadeIn} 0.25s ease-in forwards
               `
-            : props.fadeOut
-            ? css`
+            : css`
                   ${fadeOut} 0.25s ease-out forwards
-              `
-            : "none"};
+              `};
 `;
 
 export default function Transition(props) {

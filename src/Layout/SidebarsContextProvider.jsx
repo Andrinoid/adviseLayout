@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
+import { cloneDeep } from "lodash";
 import Transition from "./Transition";
 // Create Sidebar Content Context
 export const SidebarsContext = createContext();
@@ -79,9 +80,9 @@ export function useControls(config = {}) {
         return data.atRight;
     };
 
-    const getSidebars = () => {
+    const getSidebars = useCallback(() => {
         return data.sidebars;
-    };
+    }, [data.sidebars]);
 
     const getHeader = () => {
         return data.header;
@@ -103,15 +104,29 @@ export function useControls(config = {}) {
     // {children && <Transition fadeIn={true}>{children}</Transition>}
 
     function addToSidebar(content, number = 1) {
-        const sidebars = [...data.sidebars];
-        if (sidebars[number - 1]) {
-            setData({ ...data, sidebars: []});
+        if (data.sidebars[number - 1]) {
+            // data.sidebars[number - 1].data = cloneDeep(
+            //     data.sidebars[number - 1].data.map((c) => {
+            //         if (c.type.name == "Transition") {
+            //             return React.cloneElement(c, { fadeIn: false });
+            //         }
+            //         return c;
+            //     })
+            // );
 
-            sidebars[number - 1].push(
+            // setTimeout(() => {
+            //     data.sidebars[number - 1].push(
+            //         <Transition fadeIn={true}>{content}</Transition>
+            //     );
+            //     setData({ ...data, sidebars: cloneDeep(data.sidebars) });
+            // }, 100);
+
+
+            data.sidebars[number - 1].push(
                 <Transition fadeIn={true}>{content}</Transition>
             );
-
-            setData({ ...data, sidebars: Object.assign([], sidebars) });
+            setData({ ...data, sidebars: cloneDeep(data.sidebars) });
+            // setData({ ...data, sidebars: cloneDeep(data.sidebars) });
         }
     }
 
@@ -160,6 +175,7 @@ export function useControls(config = {}) {
         } else {
             data.sidebars.pop();
         }
+
         setData({
             ...data,
             sidebars: data.sidebars.map((s) => Object.assign(new Stack(), s)),
@@ -194,16 +210,17 @@ export function useControls(config = {}) {
 
         if (length > 0) {
             popSidebar(i + 1);
-        } else {
+
             const amount = getIsAtRight() ? i + 1 : all.length - i;
 
-            for (let y = 0; y < amount; y++) {
+            for (let y = 1; y < amount; y++) {
                 popStack();
             }
-        }
+        } 
     }
 
     return {
+        data,
         getSidebar,
         getSidebars,
         addToSidebar,

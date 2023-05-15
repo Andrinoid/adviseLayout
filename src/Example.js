@@ -10,6 +10,7 @@ import {
 } from "./Layout";
 import styled from "styled-components";
 import { useControls } from "./Layout/SidebarsContextProvider";
+import Transition from "./Layout/Transition";
 
 const LogoBox = styled.div`
     display: flex;
@@ -250,7 +251,6 @@ const Example = () => {
             }
         }
     };
-
 
     return (
         <Layout>

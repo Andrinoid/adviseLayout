@@ -284,6 +284,7 @@ const Sider = React.forwardRef(
                     {sidebars.map((sidebar, index) => {
                         return (
                             <div
+                                key={index}
                                 style={{ position: "relative" }}
                                 className="swipe-element"
                             >
