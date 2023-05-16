@@ -303,7 +303,7 @@ const Sider = React.forwardRef(
                                 </CloseBtn>
                                 <ResizableContainer
                                     key={index}
-                                    initialWidth={actualWidth}
+                                    initialWidth={sidebar.width ? sidebar.width : actualWidth}
                                     minWidth={minWidth}
                                     maxWidth={maxWidth}
                                     ref={ref}
@@ -327,7 +327,7 @@ const Sider = React.forwardRef(
                                     <Drawer
                                         index={index + 1}
                                         drawer={sidebar.drawer}
-                                        initialWidth={actualWidth}
+                                        initialWidth={sidebar.width ? sidebar.width : actualWidth}
                                         minWidth={minWidth}
                                         maxWidth={maxWidth}
                                         ref={ref}

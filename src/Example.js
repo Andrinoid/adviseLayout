@@ -239,6 +239,7 @@ const DatasourcesSettings = () => {
 const Example = () => {
     const siderRef = useRef(null);
     const [sidebarNumber, setSidebarNumber] = useState(1);
+    const [width, setWidth] = useState(null);
     const controls = useControls();
 
     const changeSidebar = (number) => {
@@ -411,10 +412,11 @@ const Example = () => {
                                 <ControlButton
                                     inverted
                                     onClick={() => {
-                                        controls.addSidebar(
-                                            <CompanySettings />,
-                                            { drawer: false }
-                                        );
+                                        controls.addSidebar({
+                                            component: <CompanySettings />,
+                                            drawer: false,
+                                            width: +width,
+                                        });
 
                                         setSidebarNumber(controls.length());
                                     }}
@@ -455,6 +457,60 @@ const Example = () => {
                                 >
                                     Pop all
                                 </ControlButton>
+                            </Flex>
+
+                            <Flex
+                                flexDirection="column"
+                                minHeight={100}
+                                justifyContent="space-between"
+                                alignItems="center"
+                                dashed
+                                padding={20}
+                                width={400}
+                            >
+                                <input
+                                    placeholder="Sidebar Width"
+                                    type="number"
+                                    onChange={(e) => {
+                                        // if (e.target.value == "") {
+                                        //     setSidebarNumber(1);
+                                        //     return;
+                                        // }
+                                        if (e.target.value) {
+                                            setWidth(e.target.value);
+                                            return;
+                                        }
+
+                                        if (e.target.value == "") {
+                                            setWidth(null);
+                                            return;
+                                        }
+                                        // if (
+                                        //     e.target.value >= controls.length()
+                                        // ) {
+                                        //     setSidebarNumber(controls.length());
+                                        //     return;
+                                        // }
+
+                                        // if (e.target.value < 1) {
+                                        //     setSidebarNumber(1);
+                                        //     return;
+                                        // }
+
+                                        // setSidebarNumber(e.target.value);
+                                    }}
+                                    value={width}
+                                    style={{
+                                        width: 350,
+                                        minHeight: 40,
+                                        fontSize: 20,
+                                        textAlign: "center",
+                                        border: "2px solid rgb(66, 82, 110)",
+                                        borderRadius: 5,
+                                        outline: "none",
+                                        marginBottom: 10,
+                                    }}
+                                />
                             </Flex>
                         </Flex>
                     </MainArea>

@@ -7,10 +7,17 @@ export const SidebarsContext = createContext();
 export class Stack {
     data = [];
     drawer = false;
+    width = null;
 
     constructor(component, config) {
-        if (config && config.drawer) {
-            this.drawer = config.drawer;
+        if (config) {
+            if (config.drawer) {
+                this.drawer = config.drawer;
+            }
+
+            if (config.width) {
+                this.width = config.width;
+            }
         }
 
         if (component) {
@@ -129,7 +136,10 @@ export function useControls(config = {}) {
         }
     }
 
-    function addSidebar(content, config) {
+    function addSidebar(config) {
+        const { component: content } = config;
+        delete config.component;
+        
         if (data.header.shouldCollapse && data.header.isCollapsed) return;
 
         if (data.atRight) {
