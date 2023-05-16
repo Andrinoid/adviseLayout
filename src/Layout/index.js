@@ -6,6 +6,7 @@ import LayoutContextProvider from "./LayoutContextProvider";
 import { useControls } from "./SidebarsContextProvider";
 import Drawer from "./Drawer";
 import Transition from "./Transition";
+import { last } from "lodash";
 
 const footerHeight = 38;
 const sidebarLinksWidth = 60;
@@ -233,6 +234,7 @@ const Sider = React.forwardRef(
 
         function handleSwipe(e) {
             e.preventDefault();
+            // e.stopPropagation();
             const elementYs = Array.from(
                 document.querySelectorAll(".swipe-element")
             ).map((e) => {
@@ -247,9 +249,9 @@ const Sider = React.forwardRef(
 
             if (scroll != lastScroll) {
                 if (scroll > lastScroll) {
-                    next = nextDistance("desc");
+                    next = nextDistance("desc", scroll);
                 } else {
-                    next = nextDistance("asc");
+                    next = nextDistance("asc", scroll);
                 }
 
                 container.scrollTo({
@@ -260,7 +262,7 @@ const Sider = React.forwardRef(
                 lastScroll = next;
             }
 
-            function nextDistance(order) {
+            function nextDistance(order, scroll) {
                 if (order === "asc") {
                     return elementYs
                         .reverse()
@@ -279,10 +281,6 @@ const Sider = React.forwardRef(
                     className="swipe-container"
                     width={actualWidth}
                     onTouchEnd={handleSwipe}
-                    onScroll={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }}
                     sidebarsAmount={controls.getSidebars().length}
                 >
                     {sidebars.map((sidebar, index) => {
