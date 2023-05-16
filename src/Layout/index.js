@@ -445,10 +445,9 @@ const Layout = ({ children, right }) => {
         : 0;
 
     useEffect(() => {
-        if (
-            !controls.data.resizing.isResizing &&
-            controls.data.resizing.resizingFinished
-        ) {
+        const { isResizing, resizingFinished } = controls.data.resizing;
+
+        if (!isResizing && resizingFinished) {
             const els = Array.from(document.querySelectorAll(".swipe-element"));
 
             const width = els
