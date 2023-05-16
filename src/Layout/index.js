@@ -218,10 +218,7 @@ const CloseBtn = styled.div`
 
 let lastScroll = 0;
 const Sider = React.forwardRef(
-    (
-        { width, className, maxWidth = 600, minWidth = 200, children },
-        ref
-    ) => {
+    ({ width, className, maxWidth = 600, minWidth = 200, children }, ref) => {
         const [actualWidth, setActualWidth] = useState(width);
         const controls = useControls();
 
@@ -248,18 +245,20 @@ const Sider = React.forwardRef(
 
             let next;
 
-            if (scroll > lastScroll) {
-                next = nextDistance("desc");
-            } else {
-                next = nextDistance("asc");
+            if (scroll != lastScroll) {
+                if (scroll > lastScroll) {
+                    next = nextDistance("desc");
+                } else {
+                    next = nextDistance("asc");
+                }
+
+                container.scrollTo({
+                    left: next,
+                    behavior: "smooth",
+                });
+
+                lastScroll = next;
             }
-
-            container.scrollTo({
-                left: next,
-                behavior: "smooth",
-            });
-
-            lastScroll = next;
 
             function nextDistance(order) {
                 if (order === "asc") {
@@ -307,7 +306,11 @@ const Sider = React.forwardRef(
                                 </CloseBtn>
                                 <ResizableContainer
                                     key={index}
-                                    initialWidth={sidebar.width ? sidebar.width : actualWidth}
+                                    initialWidth={
+                                        sidebar.width
+                                            ? sidebar.width
+                                            : actualWidth
+                                    }
                                     minWidth={minWidth}
                                     maxWidth={maxWidth}
                                     ref={ref}
@@ -331,7 +334,11 @@ const Sider = React.forwardRef(
                                     <Drawer
                                         index={index + 1}
                                         drawer={sidebar.drawer}
-                                        initialWidth={sidebar.width ? sidebar.width : actualWidth}
+                                        initialWidth={
+                                            sidebar.width
+                                                ? sidebar.width
+                                                : actualWidth
+                                        }
                                         minWidth={minWidth}
                                         maxWidth={maxWidth}
                                         ref={ref}
