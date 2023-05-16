@@ -112,7 +112,7 @@ const SidebarLinksContainer = styled.div`
     position: fixed;
     left: ${({ right }) => (right ? "initial" : 0)};
     right: ${({ right }) => (right ? 0 : "initial")};
-    z-index: 1;
+    z-index: 2;
 `;
 
 const SideBarPanelContainer = styled.div`
