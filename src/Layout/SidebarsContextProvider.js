@@ -48,6 +48,7 @@ export function SidebarsProvider({ children }) {
         sidebars: [],
         header: { shouldCollapse: true, isCollapsed: false },
         atRight: false,
+        isFixed: true,
     });
 
     return (
@@ -85,6 +86,10 @@ export function useControls(config = {}) {
 
     const getIsAtRight = () => {
         return data.atRight;
+    };
+
+    const setIsFixed = (value) => {
+        setData({ ...data, isFixed: value });
     };
 
     const getSidebars = useCallback(() => {
@@ -274,5 +279,6 @@ export function useControls(config = {}) {
         getIsAtRight,
         popStackFrom,
         setAtRight,
+        setIsFixed,
     };
 }

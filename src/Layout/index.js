@@ -17,7 +17,7 @@ const LayoutContainer = styled.section`
     height: 100vh;
     flex: 1;
     box-sizing: border-box;
-    padding-left: ${({ padding, right }) => (!right ? padding : "initial")}px;
+    padding-left: ${({ padding, right, isFixed }) => !isFixed ? 'initial' : (!right ? padding : "initial")}px;
     padding-right: ${({ padding, right }) => (right ? padding : "initial")}px;
     transition: padding-left 0.2s ease, padding-right 0.2s ease;
     ${({ isParent }) => {
@@ -116,7 +116,7 @@ const SidebarLinksContainer = styled.div`
 `;
 
 const SideBarPanelContainer = styled.div`
-    position: fixed;
+    position: ${({ isFixed }) => (isFixed ? "fixed" : "initial")};
     left: 0;
     top: 0;
     bottom: 0;
@@ -129,15 +129,35 @@ const SideBarPanelContainer = styled.div`
 `;
 
 const SideBarPanel = ({ children }) => {
-    const { getIsAtRight } = useControls();
-
-    if (getIsAtRight()) {
+    const controls = useControls();
+    // { getIsAtRight, data, setIsFixed }
+    if (controls.getIsAtRight()) {
         children = React.Children.map(children, (child) => {
             return React.cloneElement(child, { right: true });
         });
     }
+
+    useEffect(() => {
+        const els = Array.from(document.querySelectorAll(".swipe-element"));
+
+        const width = els
+            .map((el) => {
+                return el.offsetWidth;
+            })
+            .reduce((a, b) => a + b, 0);
+
+        if (controls.data.isFixed && (window.innerWidth / width) < 2) {
+            controls.setIsFixed(false);
+        }
+
+        if (!controls.data.isFixed && (window.innerWidth / width) > 2) {
+            controls.setIsFixed(true);
+        }
+
+    }, [controls.data]);
+
     return (
-        <SideBarPanelContainer right={getIsAtRight()}>
+        <SideBarPanelContainer isFixed={controls.data.isFixed} right={controls.getIsAtRight()}>
             {children}
         </SideBarPanelContainer>
     );
@@ -427,6 +447,7 @@ const Layout = ({ children, right }) => {
         </LayoutContextProvider>
     ) : (
         <LayoutContainer
+            isFixed={controls.data.isFixed}
             padding={padding}
             right={controls.getIsAtRight()}
             hasFooter={hasFooter}
