@@ -112,6 +112,7 @@ export function useControls(config = {}) {
         const sidebar = data.sidebars[number - 1];
 
         if (sidebar) {
+            // Update the sidebars to fade out so that it becomes invisible
             sidebar.data = cloneDeep(
                 sidebar.data.map((c) => {
                     if (c.type.name == "Transition") {
@@ -121,8 +122,12 @@ export function useControls(config = {}) {
                 })
             );
 
+            // Update the state to reflect the changes
             setData({ ...data, sidebars: cloneDeep(data.sidebars) });
 
+            // Wait for the fade out to complete and then add the content
+            // using a fade in transition and then persisting the changes
+            // to reflect the addition of the content
             setTimeout(() => {
                 sidebar.push(<Transition fadeIn={true}>{content}</Transition>);
                 setData({ ...data, sidebars: cloneDeep(data.sidebars) });
@@ -163,6 +168,7 @@ export function useControls(config = {}) {
         const sidebar = data.sidebars[number - 1];
 
         if (sidebar) {
+            // Update the sidebars to fade in again so that it becomes visible
             sidebar.data = cloneDeep(
                 sidebar.data.map((c) => {
                     if (c.type.name == "Transition") {
@@ -172,8 +178,12 @@ export function useControls(config = {}) {
                 })
             );
 
+            // Update the state to reflect the changes
             setData({ ...data, sidebars: cloneDeep(data.sidebars) });
 
+            // Wait for the fade in to complete and then remove the sidebar
+            // using a fade out transition and then persisting the changes
+            // to reflect the removal of the sidebar
             setTimeout(() => {
                 if (sidebar.length() >= 1) {
                     sidebar.data[sidebar.length() - 1] = React.cloneElement(
