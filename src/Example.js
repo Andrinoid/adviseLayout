@@ -210,28 +210,26 @@ const CompanySettings = () => {
                 {/* <CloseBtn onClick={() => controls.popSidebar(1)}><img src={process.env.PUBLIC_URL + "/cross.svg"} /></CloseBtn> */}
             </SiderTop>
             <SiderMain>
-                <ListItem>
-                    <button
-                        onClick={(e) => {
-                            console.log('clicked')
-                            e.preventDefault();
+                <ListItem
+                    onClick={(e) => {
+                        console.log("clicked");
+                        e.preventDefault();
 
-                            controls.addSidebar({
-                                component: <CompanySettings />,
-                                drawer: false,
-                            });
-                        }}
-                        onTouchEnd={(e) => {
-                            e.preventDefault();
+                        controls.addSidebar({
+                            component: <CompanySettings />,
+                            drawer: false,
+                        });
+                    }}
+                    onTouchEnd={(e) => {
+                        e.preventDefault();
 
-                            controls.addSidebar({
-                                component: <CompanySettings />,
-                                drawer: false,
-                            });
-                        }}
-                    >
-                        Company Profile
-                    </button>
+                        controls.addSidebar({
+                            component: <CompanySettings />,
+                            drawer: false,
+                        });
+                    }}
+                >
+                    Company Profile
                 </ListItem>
                 <ListItem>Users & Permissions</ListItem>
                 <ListItem>Invitation Center</ListItem>
