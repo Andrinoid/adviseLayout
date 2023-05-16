@@ -108,12 +108,12 @@ export function useControls(config = {}) {
         setData(result);
     }
 
-    // {children && <Transition fadeIn={true}>{children}</Transition>}
-
     function addToSidebar(content, number = 1) {
-        if (data.sidebars[number - 1]) {
-            data.sidebars[number - 1].data = cloneDeep(
-                data.sidebars[number - 1].data.map((c) => {
+        const sidebar = data.sidebars[number - 1];
+
+        if (sidebar) {
+            sidebar.data = cloneDeep(
+                sidebar.data.map((c) => {
                     if (c.type.name == "Transition") {
                         return React.cloneElement(c, { fadeIn: false });
                     }
@@ -124,17 +124,9 @@ export function useControls(config = {}) {
             setData({ ...data, sidebars: cloneDeep(data.sidebars) });
 
             setTimeout(() => {
-                data.sidebars[number - 1].push(
-                    <Transition fadeIn={true}>{content}</Transition>
-                );
+                sidebar.push(<Transition fadeIn={true}>{content}</Transition>);
                 setData({ ...data, sidebars: cloneDeep(data.sidebars) });
             }, 100);
-
-            // data.sidebars[number - 1].push(
-            //     <Transition fadeIn={true}>{content}</Transition>
-            // );
-            // setData({ ...data, sidebars: cloneDeep(data.sidebars) });
-            // setData({ ...data, sidebars: cloneDeep(data.sidebars) });
         }
     }
 
@@ -168,9 +160,11 @@ export function useControls(config = {}) {
     }
 
     function popSidebar(number) {
-        if (data.sidebars[number - 1]) {
-            data.sidebars[number - 1].data = cloneDeep(
-                data.sidebars[number - 1].data.map((c) => {
+        const sidebar = data.sidebars[number - 1];
+
+        if (sidebar) {
+            sidebar.data = cloneDeep(
+                sidebar.data.map((c) => {
                     if (c.type.name == "Transition") {
                         return React.cloneElement(c, { fadeIn: true });
                     }
@@ -181,29 +175,20 @@ export function useControls(config = {}) {
             setData({ ...data, sidebars: cloneDeep(data.sidebars) });
 
             setTimeout(() => {
-                if (data.sidebars[number - 1].length() >= 1) {
-                    data.sidebars[number - 1].data[
-                        data.sidebars[number - 1].data.length - 1
-                    ] = React.cloneElement(
-                        data.sidebars[number - 1].data[
-                            data.sidebars[number - 1].data.length - 1
-                        ],
+                if (sidebar.length() >= 1) {
+                    sidebar.data[sidebar.length() - 1] = React.cloneElement(
+                        sidebar.data[sidebar.data.length - 1],
                         { fadeIn: false }
                     );
-    
+
                     setData({ ...data, sidebars: cloneDeep(data.sidebars) });
                 }
 
                 setTimeout(() => {
-                    data.sidebars[number - 1].pop();
+                    sidebar.pop();
                     setData({ ...data, sidebars: cloneDeep(data.sidebars) });
                 }, 50);
             }, 50);
-
-            
-
-            // data.sidebars[number - 1].pop();
-            // setData({ ...data, sidebars: Object.assign([], data.sidebars) });
         }
     }
 
