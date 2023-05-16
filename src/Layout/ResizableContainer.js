@@ -65,6 +65,7 @@ export const ResizableContainer = React.forwardRef(function (
 
     const [hoverActive, setHoverActive] = useState(false);
     const hoverTimeout = useRef(null);
+    const controls = useControls();
 
     const handleMouseEnter = () => {
         hoverTimeout.current = setTimeout(() => {
@@ -103,6 +104,10 @@ export const ResizableContainer = React.forwardRef(function (
     const mouseDownHandler = (e) => {
         const { clientX } = e;
         setIsResizing(true);
+        controls.setResizing({
+            isResizing: true,
+            resizingFinished: false,
+        })
         // capture the initial x position on drag start
         setX(clientX);
         // capture the initial container width on drag start
@@ -152,6 +157,10 @@ export const ResizableContainer = React.forwardRef(function (
         document.removeEventListener("mouseup", mouseUpHandler);
         prevClientXRef.current = null;
         setIsResizing(false);
+        controls.setResizing({
+            isResizing: false,
+            resizingFinished: true,
+        })
     };
 
     const handleDoubleClick = () => {

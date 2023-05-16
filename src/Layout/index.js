@@ -17,7 +17,8 @@ const LayoutContainer = styled.section`
     height: 100vh;
     flex: 1;
     box-sizing: border-box;
-    padding-left: ${({ padding, right, isFixed }) => !isFixed ? 'initial' : (!right ? padding : "initial")}px;
+    padding-left: ${({ padding, right, isFixed }) =>
+        !isFixed ? "initial" : !right ? padding : "initial"}px;
     padding-right: ${({ padding, right }) => (right ? padding : "initial")}px;
     transition: padding-left 0.2s ease, padding-right 0.2s ease;
     ${({ isParent }) => {
@@ -146,18 +147,20 @@ const SideBarPanel = ({ children }) => {
             })
             .reduce((a, b) => a + b, 0);
 
-        if (controls.data.isFixed && (window.innerWidth / width) < 2) {
+        if (controls.data.isFixed && window.innerWidth / width < 2) {
             controls.setIsFixed(false);
         }
 
-        if (!controls.data.isFixed && (window.innerWidth / width) > 2) {
+        if (!controls.data.isFixed && window.innerWidth / width > 2) {
             controls.setIsFixed(true);
         }
-
     }, [controls.data]);
 
     return (
-        <SideBarPanelContainer isFixed={controls.data.isFixed} right={controls.getIsAtRight()}>
+        <SideBarPanelContainer
+            isFixed={controls.data.isFixed}
+            right={controls.getIsAtRight()}
+        >
             {children}
         </SideBarPanelContainer>
     );
@@ -392,6 +395,7 @@ const Sider = React.forwardRef(
 
 const Layout = ({ children, right }) => {
     const controls = useControls();
+    const [newPadding, setNewPadding] = useState(null);
 
     const siders = controls.getSidebars().filter((s) => !s.drawer);
 
@@ -440,6 +444,27 @@ const Layout = ({ children, right }) => {
             : paddingLeft
         : 0;
 
+    useEffect(() => {
+        if (
+            !controls.data.resizing.isResizing &&
+            controls.data.resizing.resizingFinished
+        ) {
+            const els = Array.from(document.querySelectorAll(".swipe-element"));
+
+            const width = els
+                .map((el) => {
+                    return el.offsetWidth;
+                })
+                .reduce((a, b) => a + b, 0);
+
+            setNewPadding(width + 60);
+            controls.setResizing({
+                isResizing: false,
+                resizingFinished: false,
+            });
+        }
+    }, [controls.data]);
+
     //only render the LayoutContextProveder on the parent Layout
     return isParent ? (
         <LayoutContextProvider>
@@ -448,7 +473,7 @@ const Layout = ({ children, right }) => {
     ) : (
         <LayoutContainer
             isFixed={controls.data.isFixed}
-            padding={padding}
+            padding={newPadding != null ? newPadding : padding}
             right={controls.getIsAtRight()}
             hasFooter={hasFooter}
             hasHeader={hasHeader}

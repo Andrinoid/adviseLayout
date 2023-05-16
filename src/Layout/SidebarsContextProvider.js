@@ -49,6 +49,10 @@ export function SidebarsProvider({ children }) {
         header: { shouldCollapse: true, isCollapsed: false },
         atRight: false,
         isFixed: true,
+        resizing: {
+            isResizing: false,
+            resizingFinished: false,
+        },
     });
 
     return (
@@ -70,6 +74,13 @@ export function useControls(config = {}) {
 
     if (config.position && config.position == "right") {
         setData({ ...data, atRight: true });
+    }
+
+    function setResizing({ isResizing, resizingFinished }) {
+        setData({
+            ...data,
+            resizing: { isResizing, resizingFinished },
+        });
     }
 
     const getSidebar = function (number = 1) {
@@ -280,5 +291,6 @@ export function useControls(config = {}) {
         popStackFrom,
         setAtRight,
         setIsFixed,
+        setResizing,
     };
 }
