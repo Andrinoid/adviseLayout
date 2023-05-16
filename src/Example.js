@@ -210,7 +210,29 @@ const CompanySettings = () => {
                 {/* <CloseBtn onClick={() => controls.popSidebar(1)}><img src={process.env.PUBLIC_URL + "/cross.svg"} /></CloseBtn> */}
             </SiderTop>
             <SiderMain>
-                <ListItem>Company Profile</ListItem>
+                <ListItem>
+                    <button
+                        onClick={(e) => {
+                            console.log('clicked')
+                            e.preventDefault();
+
+                            controls.addSidebar({
+                                component: <CompanySettings />,
+                                drawer: false,
+                            });
+                        }}
+                        onTouchEnd={(e) => {
+                            e.preventDefault();
+
+                            controls.addSidebar({
+                                component: <CompanySettings />,
+                                drawer: false,
+                            });
+                        }}
+                    >
+                        Company Profile
+                    </button>
+                </ListItem>
                 <ListItem>Users & Permissions</ListItem>
                 <ListItem>Invitation Center</ListItem>
             </SiderMain>
@@ -469,6 +491,7 @@ const Example = () => {
                                 width={400}
                             >
                                 <input
+                                    value={width == null ? "" : width}
                                     placeholder="Sidebar Width"
                                     type="number"
                                     onChange={(e) => {
@@ -499,7 +522,6 @@ const Example = () => {
 
                                         // setSidebarNumber(e.target.value);
                                     }}
-                                    value={width}
                                     style={{
                                         width: 350,
                                         minHeight: 40,
