@@ -6,7 +6,7 @@ import LayoutContextProvider from "./LayoutContextProvider";
 import { useControls } from "./SidebarsContextProvider";
 import Drawer from "./Drawer";
 import Transition from "./Transition";
-import { last } from "lodash";
+import { last, set } from "lodash";
 
 const footerHeight = 38;
 const sidebarLinksWidth = 60;
@@ -444,25 +444,42 @@ const Layout = ({ children, right }) => {
             : paddingLeft
         : 0;
 
+    function getWidth() {
+        const els = Array.from(document.querySelectorAll(".swipe-element"));
+
+        return els
+            .map((el) => {
+                return el.offsetWidth;
+            })
+            .reduce((a, b) => a + b, 0);
+    }
+
     useEffect(() => {
         const { isResizing, resizingFinished } = controls.data.resizing;
 
         if (!isResizing && resizingFinished) {
-            const els = Array.from(document.querySelectorAll(".swipe-element"));
-
-            const width = els
-                .map((el) => {
-                    return el.offsetWidth;
-                })
-                .reduce((a, b) => a + b, 0);
-
-            setNewPadding(width + 60);
+            setNewPadding(getWidth() + 60);
             controls.setResizing({
                 isResizing: false,
                 resizingFinished: false,
             });
         }
-    }, [controls.data]);
+    }, [controls.data.resizing]);
+
+    // useEffect(() => {}, [controls.data.sidebars.length]);
+
+    useEffect(() => {
+        if (controls.data.popped) {
+            if (controls.data.sidebars.length >= 0) {
+                controls.setPopped(false);
+                setTimeout(() => {
+                    setNewPadding(getWidth() + 60);
+                }, 100)
+            }
+        } else {
+            setNewPadding(paddingLeft);
+        }
+    }, [controls.data.popped, controls.data.sidebars.length]);
 
     //only render the LayoutContextProveder on the parent Layout
     return isParent ? (

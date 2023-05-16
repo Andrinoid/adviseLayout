@@ -53,6 +53,7 @@ export function SidebarsProvider({ children }) {
             isResizing: false,
             resizingFinished: false,
         },
+        popped: false,
     });
 
     return (
@@ -74,6 +75,10 @@ export function useControls(config = {}) {
 
     if (config.position && config.position == "right") {
         setData({ ...data, atRight: true });
+    }
+
+    function setPopped(value) {
+        setData({ ...data, popped: value });
     }
 
     function setResizing({ isResizing, resizingFinished }) {
@@ -233,6 +238,7 @@ export function useControls(config = {}) {
 
         setData({
             ...data,
+            popped: true,
             sidebars: data.sidebars.map((s) => Object.assign(new Stack(), s)),
         });
     }
@@ -292,5 +298,6 @@ export function useControls(config = {}) {
         setAtRight,
         setIsFixed,
         setResizing,
+        setPopped,
     };
 }
