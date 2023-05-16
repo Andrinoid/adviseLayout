@@ -181,9 +181,26 @@ export function useControls(config = {}) {
             setData({ ...data, sidebars: cloneDeep(data.sidebars) });
 
             setTimeout(() => {
-                data.sidebars[number - 1].pop();
-                setData({ ...data, sidebars: cloneDeep(data.sidebars) });
-            }, 100);
+                if (data.sidebars[number - 1].length() >= 1) {
+                    data.sidebars[number - 1].data[
+                        data.sidebars[number - 1].data.length - 1
+                    ] = React.cloneElement(
+                        data.sidebars[number - 1].data[
+                            data.sidebars[number - 1].data.length - 1
+                        ],
+                        { fadeIn: false }
+                    );
+    
+                    setData({ ...data, sidebars: cloneDeep(data.sidebars) });
+                }
+
+                setTimeout(() => {
+                    data.sidebars[number - 1].pop();
+                    setData({ ...data, sidebars: cloneDeep(data.sidebars) });
+                }, 50);
+            }, 50);
+
+            
 
             // data.sidebars[number - 1].pop();
             // setData({ ...data, sidebars: Object.assign([], data.sidebars) });
