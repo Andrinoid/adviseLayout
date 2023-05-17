@@ -447,10 +447,10 @@ const Example = () => {
                                 <ControlButton
                                     inverted
                                     onClick={() => {
-                                        controls.addSidebar(
-                                            <CompanySettings />,
-                                            { drawer: true }
-                                        );
+                                        controls.addSidebar({
+                                            component: <CompanySettings />,
+                                            drawer: true,
+                                        });
 
                                         setSidebarNumber(controls.length());
                                     }}
