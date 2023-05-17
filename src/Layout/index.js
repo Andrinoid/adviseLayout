@@ -139,7 +139,7 @@ const SideBarPanel = ({ children }) => {
     }
 
     useEffect(() => {
-        const els = Array.from(document.querySelectorAll(".swipe-element"));
+        const els = Array.from(document.querySelectorAll(".swipe-element-sidebar"));
 
         const width = els
             .map((el) => {
@@ -314,7 +314,7 @@ const Sider = React.forwardRef(
                             <div
                                 key={index}
                                 style={{ position: "relative" }}
-                                className="swipe-element"
+                                className="swipe-element swipe-element-sidebar"
                             >
                                 <CloseBtn
                                     onClick={() =>
@@ -370,7 +370,7 @@ const Sider = React.forwardRef(
                                         maxWidth={maxWidth}
                                         ref={ref}
                                         right={controls.getIsAtRight()}
-                                        className={className + " swipe-element"}
+                                        className={className + " swipe-element swipe-element-drawer"}
                                         closeButton={
                                             <CloseBtn
                                                 onClick={() =>
@@ -451,7 +451,7 @@ const Layout = ({ children, right }) => {
         : 0;
 
     function getWidth() {
-        const els = Array.from(document.querySelectorAll(".swipe-element"));
+        const els = Array.from(document.querySelectorAll(".swipe-element-sidebar"));
 
         return els
             .map((el) => {

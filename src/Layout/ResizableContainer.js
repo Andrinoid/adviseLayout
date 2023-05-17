@@ -59,7 +59,7 @@ export const ResizableContainer = React.forwardRef(function (
 
     const [w, setW] = useState(initialWidth);
     const [x, setX] = useState(0);
-    const [newWidth, setNewWidth] = useState(0);
+    const [newWidth, setNewWidth] = useState(initialWidth);
     const [isResizing, setIsResizing] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
