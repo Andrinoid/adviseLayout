@@ -483,7 +483,7 @@ const Layout = ({ children, right }) => {
                 }, 100)
             }
         } else {
-            setNewPadding(paddingLeft);
+            setNewPadding(getWidth() + 60);
         }
     }, [controls.data.popped, controls.data.sidebars.length]);
 
