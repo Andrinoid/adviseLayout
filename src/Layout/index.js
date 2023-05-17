@@ -56,7 +56,7 @@ const LayoutContainerParent = styled.section`
 const Content = styled.main`
     display: block;
     flex: 1 1 auto;
-    user-select: none;
+    /* user-select: none; */
     /* overflow-y: scroll; */
     // padding-bottom: ${footerHeight}px;
     padding-left: ${({ paddingLeft }) => paddingLeft}px;
@@ -85,13 +85,13 @@ const SiderContainer = styled.div`
 
         if (isTouchDevice) {
             return `
-                overflow: scroll;
+            // overflow: scroll;
                 overflow-x: scroll;
                 scroll-snap-type: x mandatory;
 
-                &::-webkit-scrollbar {
-                    display: none;
-                }
+                // &::-webkit-scrollbar {
+                //     display: none;
+                // }
 
                 width: ${width}px;
             `;
@@ -190,13 +190,13 @@ const SwipeContainer = styled.div`
 
         if (isTouchDevice) {
             let result = `
-                overflow: scroll;
+                // overflow: scroll;
                 overflow-x: scroll;
                 scroll-snap-type: x mandatory;
 
-                &::-webkit-scrollbar {
-                    display: none;
-                }
+                // &::-webkit-scrollbar {
+                //     display: none;
+                // }
             `;
 
             if (sidebarsAmount > 0) {
