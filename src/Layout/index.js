@@ -304,6 +304,9 @@ const Sider = React.forwardRef(
                     className="swipe-container"
                     width={actualWidth}
                     onTouchEnd={handleSwipe}
+                    onScroll={(e) => {
+                        e.preventDefault();
+                    }}
                     sidebarsAmount={controls.getSidebars().length}
                 >
                     {sidebars.map((sidebar, index) => {
@@ -317,6 +320,9 @@ const Sider = React.forwardRef(
                                     onClick={() =>
                                         controls.popStackFrom(sidebar)
                                     }
+                                    onTouchEnd={() => {
+                                        controls.popStackFrom(sidebar);
+                                    }}
                                 >
                                     <img
                                         src={
