@@ -212,7 +212,6 @@ const CompanySettings = () => {
             <SiderMain>
                 <ListItem
                     onClick={(e) => {
-                        console.log("clicked");
                         e.preventDefault();
 
                         controls.addSidebar({

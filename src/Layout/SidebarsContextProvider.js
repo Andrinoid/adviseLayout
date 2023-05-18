@@ -7,7 +7,7 @@ export const SidebarsContext = createContext();
 export class Stack {
     data = [];
     drawer = false;
-    width = null;
+    width = 260;
 
     constructor(component, config) {
         if (config) {
@@ -46,7 +46,10 @@ export class Stack {
 export function SidebarsProvider({ children }) {
     const [data, setData] = useState({
         sidebars: [],
-        header: { shouldCollapse: true, isCollapsed: false },
+        collapsing: {
+            isCollapsed: false,
+            collapsingFinished: false,
+        },
         atRight: false,
         isFixed: true,
         resizing: {
@@ -116,18 +119,16 @@ export function useControls(config = {}) {
         return data.header;
     };
 
-    function setShouldCollapse(shouldCollapse) {
-        setData({ ...data, header: { ...data.header, shouldCollapse } });
-    }
 
-    function toggleCollapsed() {
-        const result = {
+    const setCollapsing = (isCollapsed, collapsingFinished) => {
+        setData({
             ...data,
-            header: { ...data.header, isCollapsed: !data.header.isCollapsed },
-        };
-
-        setData(result);
-    }
+            collapsing: {
+                collapsingFinished: collapsingFinished,
+                isCollapsed: isCollapsed,
+            },
+        });
+    };
 
     function addToSidebar(content, number = 1) {
         const sidebar = data.sidebars[number - 1];
@@ -160,7 +161,7 @@ export function useControls(config = {}) {
         const { component: content } = config;
         delete config.component;
 
-        if (data.header.shouldCollapse && data.header.isCollapsed) return;
+        if (data.isCollapsed) return;
 
         if (data.atRight) {
             data.sidebars.unshift(new Stack(content, config));
@@ -168,21 +169,17 @@ export function useControls(config = {}) {
             data.sidebars.push(new Stack(content, config));
         }
 
-        if (data.header.shouldCollapse) {
-            const isCollapsed =
-                data.header.isCollapsed && data.sidebars.length == 1
-                    ? false
-                    : data.header.isCollapsed && data.sidebars.length > 0
-                    ? true
-                    : false;
-            setData({
-                ...data,
-                sidebars: Object.assign([], data.sidebars),
-                header: { ...data.header, isCollapsed },
-            });
-        } else {
-            setData({ ...data, sidebars: Object.assign([], data.sidebars) });
-        }
+        const isCollapsed =
+            data.isCollapsed && data.sidebars.length == 1
+                ? false
+                : data.isCollapsed && data.sidebars.length > 0
+                ? true
+                : false;
+        setData({
+            ...data,
+            sidebars: Object.assign([], data.sidebars),
+            isCollapsed,
+        });
     }
 
     function popSidebar(number) {
@@ -228,7 +225,7 @@ export function useControls(config = {}) {
     }
 
     function popStack() {
-        if (data.header.shouldCollapse && data.header.isCollapsed) return;
+        if (data.isCollapsed) return;
 
         if (data.atRight) {
             data.sidebars.shift();
@@ -244,7 +241,7 @@ export function useControls(config = {}) {
     }
 
     const popStacks = (type = null) => {
-        if (data.header.shouldCollapse && data.header.isCollapsed) return;
+        if (data.isCollapsed) return;
 
         const length = data.sidebars.length;
 
@@ -291,13 +288,12 @@ export function useControls(config = {}) {
         popStack,
         popStacks,
         getHeader,
-        setShouldCollapse,
-        toggleCollapsed,
         getIsAtRight,
         popStackFrom,
         setAtRight,
         setIsFixed,
         setResizing,
         setPopped,
+        setCollapsing,
     };
 }

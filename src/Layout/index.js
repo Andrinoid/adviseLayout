@@ -139,7 +139,9 @@ const SideBarPanel = ({ children }) => {
     }
 
     useEffect(() => {
-        const els = Array.from(document.querySelectorAll(".swipe-element-sidebar"));
+        const els = Array.from(
+            document.querySelectorAll(".swipe-element-sidebar")
+        );
 
         const width = els
             .map((el) => {
@@ -249,7 +251,7 @@ const Sider = React.forwardRef(
         useEffect(() => {
             const isTouchDevice =
                 "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
-            console.log(isTouchDevice);
+
             if (isTouchDevice) {
                 setActualWidth(window.innerWidth - 60);
             }
@@ -370,7 +372,10 @@ const Sider = React.forwardRef(
                                         maxWidth={maxWidth}
                                         ref={ref}
                                         right={controls.getIsAtRight()}
-                                        className={className + " swipe-element swipe-element-drawer"}
+                                        className={
+                                            className +
+                                            " swipe-element swipe-element-drawer"
+                                        }
                                         closeButton={
                                             <CloseBtn
                                                 onClick={() =>
@@ -439,19 +444,16 @@ const Layout = ({ children, right }) => {
         return React.cloneElement(child, { right: right });
     });
 
-    const sidebarWidth = 260;
-    const paddingLeft = 60 + siders.length * sidebarWidth;
+    const paddingLeft = siders.reduce((a, b) => {
+        return a + b.width;
+    }, 60);
 
-    const header = controls.getHeader();
-
-    const padding = header.shouldCollapse
-        ? header.isCollapsed
-            ? 60
-            : paddingLeft
-        : 0;
+    const padding = controls.data.isCollapsed ? 60 : paddingLeft;
 
     function getWidth() {
-        const els = Array.from(document.querySelectorAll(".swipe-element-sidebar"));
+        const els = Array.from(
+            document.querySelectorAll(".swipe-element-sidebar")
+        );
 
         return els
             .map((el) => {
@@ -472,20 +474,41 @@ const Layout = ({ children, right }) => {
         }
     }, [controls.data.resizing]);
 
-    // useEffect(() => {}, [controls.data.sidebars.length]);
-
     useEffect(() => {
         if (controls.data.popped) {
             if (controls.data.sidebars.length >= 0) {
                 controls.setPopped(false);
                 setTimeout(() => {
                     setNewPadding(getWidth() + 60);
-                }, 100)
+                }, 100);
             }
         } else {
             setNewPadding(getWidth() + 60);
         }
     }, [controls.data.popped, controls.data.sidebars.length]);
+
+    useEffect(() => {
+        const { isCollapsed, collapsingFinished } = controls.data.collapsing;
+
+        if (!isCollapsed && !collapsingFinished) {
+            setNewPadding(paddingLeft);
+        }
+
+        if (isCollapsed && collapsingFinished) {
+            setNewPadding(60);
+            controls.setCollapsing(!isCollapsed, false);
+        } else {
+            if (!isCollapsed && collapsingFinished) {
+                setNewPadding(60);
+                setTimeout(() => {
+                    controls.setCollapsing(!isCollapsed, false);
+                }, 100);
+            }
+        }
+    }, [
+        controls.data.collapsing.collapsingFinished,
+        controls.data.collapsing.isCollapsed,
+    ]);
 
     //only render the LayoutContextProveder on the parent Layout
     return isParent ? (

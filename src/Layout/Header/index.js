@@ -37,28 +37,23 @@ const Header = ({ siderRef, hasSidebarLinks, children }) => {
     const controls = useControls();
 
     const toggleSidebar = useCallback(() => {
-        const header = controls.getHeader();
-        
-        if (header.shouldCollapse) {
-            controls.toggleCollapsed();
+        controls.setCollapsing(controls.data.collapsing.isCollapsed, true);
 
-            if (siderRef.current) {
-                siderRef.current.toggle();
-                controls.popStacks("drawer");
-            }
-        } else {
-            controls.popStacks();
+        if (siderRef.current) {
+            siderRef.current.toggle();
+            controls.popStacks("drawer");
         }
     }, [controls, siderRef]);
-
 
     const amount = controls.getSidebars().filter((s) => s.drawer).length;
 
     return (
         <HeaderContainer hasSidebarLinks={hasSidebarLinks}>
             {controls.getSidebars().filter((s) => !s.drawer).length > 0 && (
-            
-                <MenuButton onClick={toggleSidebar} style={{ paddingLeft: 260 * amount}}>
+                <MenuButton
+                    onClick={toggleSidebar}
+                    style={{ paddingLeft: 260 * amount }}
+                >
                     <MenuIcon />
                 </MenuButton>
             )}
