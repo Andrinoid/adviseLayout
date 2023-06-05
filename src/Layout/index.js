@@ -530,4 +530,4 @@ const Layout = ({ children, right }) => {
     );
 };
 
-export { Layout, Sider, SidebarLinks, Header, Content, Footer, SideBarPanel };
+export { Layout, Sider, SidebarLinks, Header, Content, Footer, SideBarPanel, useControls };
