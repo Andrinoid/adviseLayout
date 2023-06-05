@@ -3,10 +3,13 @@ import styled, { css, keyframes } from "styled-components";
 import { ResizableContainer } from "./ResizableContainer";
 import Header from "./Header";
 import LayoutContextProvider from "./LayoutContextProvider";
-import { useControls } from "./SidebarsContextProvider";
+import {
+    useControls,
+    SidebarsProvider,
+    SidebarsContext,
+} from "./SidebarsContextProvider";
 import Drawer from "./Drawer";
 import Transition from "./Transition";
-import { last, set } from "lodash";
 
 const footerHeight = 38;
 const sidebarLinksWidth = 60;
@@ -530,4 +533,15 @@ const Layout = ({ children, right }) => {
     );
 };
 
-export { Layout, Sider, SidebarLinks, Header, Content, Footer, SideBarPanel, useControls };
+export {
+    Layout,
+    Sider,
+    SidebarLinks,
+    Header,
+    Content,
+    Footer,
+    SideBarPanel,
+    useControls,
+    SidebarsProvider,
+    SidebarsContext,
+};
