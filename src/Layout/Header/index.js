@@ -33,7 +33,7 @@ const MenuButton = styled.div`
     }
 `;
 
-const Header = ({ siderRef, hasSidebarLinks, children }) => {
+const Header = ({ siderRef, height, hasSidebarLinks, children, ...rest }) => {
     const controls = useControls();
 
     const toggleSidebar = useCallback(() => {
@@ -48,7 +48,7 @@ const Header = ({ siderRef, hasSidebarLinks, children }) => {
     const amount = controls.getSidebars().filter((s) => s.drawer).length;
 
     return (
-        <HeaderContainer hasSidebarLinks={hasSidebarLinks}>
+        <HeaderContainer style={{ height: height }} {...rest} hasSidebarLinks={hasSidebarLinks}>
             {controls.getSidebars().filter((s) => !s.drawer).length > 0 && (
                 <MenuButton
                     onClick={toggleSidebar}
